@@ -4,7 +4,7 @@ from googletrans-py import Translator #(phai update bang pip install googletrans
 from gtts import gTTS   #cho txt to speech
 from io import BytesIO  #cho txt to speech
 from IPython.display import Audio   #cho txt to speech
-import base64   #cho txt to speech
+
 
 def speech_to_text(lang):
     # Create a speech recognition object
