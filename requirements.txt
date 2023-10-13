@@ -1,5 +1,5 @@
 speechrecognition
-googletrans-py
+googletrans-py==4.0.0
 gtts
 pyaudio
 ipython
