@@ -49,14 +49,15 @@ def main():
     vaichon = st.radio(":green[Select one of options:]", 
                     [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]"], 
                     index=None,horizontal=True ) 
+
     st.write("---")
-    if 'A.' in vaichon:
-        st.write(":blue[Selected - Đã chọn:]", vaichon + ":blue[(Hãy nói gì đó...)]")
+    if vaichon == ":red[A.(Say Vi - Nói tiếng Việt):balloon:]":
+        st.write(":blue[Selected - Đã chọn:]", ":red[A.(Say Vi - Nói tiếng Việt):balloon:]" + ":blue[(Hãy nói gì đó...)]")
         lang="vi-VN"
         lang_src='vi'
         lang_dest='en'
     else:
-        st.write(":blue[Selected - Đã chọn:]", vaichon + ":blue[(Say something...)]")
+        st.write(":blue[Selected - Đã chọn:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]" + ":blue[(Say something...)]")
         lang="en_US"
         lang_src='en'
         lang_dest='vi'
@@ -67,10 +68,10 @@ def main():
     #B2: dich sang text En hoac Vi
     if l_text is not None:
         txt_translated = textsrc_to_textdest(l_text, lang_src, lang_dest)
-    st.write(txt_translated)
-
-    audio_io = text_to_speech(txt_translated, lang_dest)
-    st.audio(audio_io, format="audio/wav",start_time=0)
+        st.write(txt_translated)
+    if l_text is not None:
+        audio_io = text_to_speech(txt_translated, lang_dest)
+        st.audio(audio_io, format="audio/wav",start_time=0)
 
 if __name__ == '__main__':
     main()
