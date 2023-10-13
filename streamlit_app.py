@@ -1,9 +1,9 @@
-import streamlit as st
+#import streamlit as st
 import speech_recognition as sr #cho speech to txt
+import googletrans
 from googletrans import Translator #(phai update bang pip install googletrans-py or install googletrans==4.0.0-rc1 )
-
 from gtts import gTTS   #cho txt to speech
-from io import BytesIO  #cho txt to speech
+#from io import BytesIO  #cho txt to speech
 from IPython.display import Audio   #cho txt to speech
 
 
