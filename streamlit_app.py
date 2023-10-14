@@ -8,10 +8,10 @@
 #https://talkenvi-b5vypm7itcecxnkuvne7h9.streamlit.app/ 
 #la url app moi talkenvi
 import streamlit as st
-import speech_recognition as sr #cho speech to txt
-from googletrans import Translator #(phai update bang pip install googletrans-py )
-from gtts import gTTS   #cho txt to speech
-from io import BytesIO  #cho txt to speech
+import speech_recognition as sr 
+from googletrans import Translator 
+from gtts import gTTS   
+from io import BytesIO  
 #from IPython.display import Audio   #cho txt to speech
 #import base64   #cho txt to speech
 
