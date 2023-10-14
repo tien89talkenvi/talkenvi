@@ -1,11 +1,10 @@
 import streamlit as st
 import speech_recognition as sr #cho speech to txt
-import googletrans
-from googletrans import Translator #(phai update bang pip install googletrans-py or install googletrans==4.0.0-rc1 )
+from googletrans import Translator #(phai update bang pip install googletrans-py )
 from gtts import gTTS   #cho txt to speech
 from io import BytesIO  #cho txt to speech
-from IPython.display import Audio   #cho txt to speech
-
+#from IPython.display import Audio   #cho txt to speech
+#import base64   #cho txt to speech
 
 def speech_to_text(lang):
     # Create a speech recognition object
@@ -45,34 +44,31 @@ def text_to_speech(text, lang='vi'):
 
 
 #######################################################
-def main():
-    st.subheader(":blue[Talk in Vietnamese and English]")
-    vaichon = st.radio(":green[Select one of options:]", 
-                    [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]"], 
-                    index=None,horizontal=True ) 
+st.subheader(":blue[Talk in Vietnamese and English]")
+vaichon = st.radio(":green[Select one of options:]", 
+                [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]"], 
+                index=None,horizontal=True ) 
 
-    st.write("---")
-    if vaichon == ":red[A.(Say Vi - Nói tiếng Việt):balloon:]":
-        st.write(":blue[Selected - Đã chọn:]", ":red[A.(Say Vi - Nói tiếng Việt):balloon:]" + ":blue[(Hãy nói gì đó...)]")
-        lang="vi-VN"
-        lang_src='vi'
-        lang_dest='en'
-    else:
-        st.write(":blue[Selected - Đã chọn:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]" + ":blue[(Say something...)]")
-        lang="en_US"
-        lang_src='en'
-        lang_dest='vi'
+st.write("---")
+if vaichon == ":red[A.(Say Vi - Nói tiếng Việt):balloon:]":
+    st.write(":blue[Selected - Đã chọn:]", ":red[A.(Say Vi - Nói tiếng Việt):balloon:]" + ":blue[(Hãy nói gì đó...)]")
+    lang="vi-VN"
+    lang_src='vi'
+    lang_dest='en'
+else:
+    st.write(":blue[Selected - Đã chọn:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]" + ":blue[(Say something...)]")
+    lang="en_US"
+    lang_src='en'
+    lang_dest='vi'
 
-    #B1: ghi am giong noi va chuyen thanh text
-    l_text = speech_to_text(lang)
-    st.write(l_text)
-    #B2: dich sang text En hoac Vi
-    if l_text is not None:
-        txt_translated = textsrc_to_textdest(l_text, lang_src, lang_dest)
-        st.write(txt_translated)
-    if l_text is not None:
-        audio_io = text_to_speech(txt_translated, lang_dest)
-        st.audio(audio_io, format="audio/wav",start_time=0)
+#B1: ghi am giong noi va chuyen thanh text
+l_text = speech_to_text(lang)
+st.write(l_text)
+#B2: dich sang text En hoac Vi
+if l_text is not None:
+    txt_translated = textsrc_to_textdest(l_text, lang_src, lang_dest)
+    st.write(txt_translated)
+if l_text is not None:
+    audio_io = text_to_speech(txt_translated, lang_dest)
+    st.audio(audio_io, format="audio/wav",start_time=0)
 
-if __name__ == '__main__':
-    main()
