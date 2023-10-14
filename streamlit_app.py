@@ -53,7 +53,7 @@ def text_to_speech(text, lang='vi'):
 
 
 #######################################################
-st.subheader(":blue[Talk in Vietnamese and English]")
+st.subheader(":blue[Trò chuyện bằng tiếng Việt và Anh (Talk in Vietnamese and English)]")
 vaichon = st.radio(":green[Select one of options:]", 
                 [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]"], 
                 index=None,horizontal=True ) 
