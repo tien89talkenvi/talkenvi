@@ -1,3 +1,12 @@
+#streamlit==1.27.2
+#SpeechRecognition==3.10.0
+#pyaudio==0.2.13 #(cho SpeechRecognition lay micro )
+#googletrans==4.0.0rc1 #(phien ban nay cho rieng py khi su dung googletrans, cac pban khac hay gay loi)
+#gTTS==2.4.0
+
+
+#https://talkenvi-b5vypm7itcecxnkuvne7h9.streamlit.app/ 
+#la url app moi talkenvi
 import streamlit as st
 import speech_recognition as sr #cho speech to txt
 from googletrans import Translator #(phai update bang pip install googletrans-py )
@@ -71,4 +80,3 @@ if l_text is not None:
 if l_text is not None:
     audio_io = text_to_speech(txt_translated, lang_dest)
     st.audio(audio_io, format="audio/wav",start_time=0)
-
