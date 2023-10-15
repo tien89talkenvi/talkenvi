@@ -9,6 +9,7 @@
 #la url app moi talkenvi
 import streamlit as st
 import speech_recognition as sr 
+import pyaudio
 from googletrans import Translator 
 from gtts import gTTS   
 from io import BytesIO  
