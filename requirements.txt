@@ -1,6 +1,7 @@
 streamlit
 SpeechRecognition
+pyaudio==0.2.11
 googletrans==4.0.0rc1
 gTTS
-pyaudio==0.2.13
+
 
