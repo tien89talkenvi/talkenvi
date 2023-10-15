@@ -54,10 +54,10 @@ def text_to_speech(text, lang='vi'):
 
 
 #######################################################
-st.subheader(":blue[Trò chuyện bằng tiếng Việt và Anh (Talk in Vietnamese and English)]")
+st.subheader(":blue[Trò chuyện bằng tiếng Việt, Anh - Talk in Vietnamese, English]")
 vaichon = st.radio(":green[Select one of options:]", 
-                [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]"], 
-                index=None,horizontal=True ) 
+                [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]","STOP"], 
+                index=2,horizontal=True ) 
 
 st.write("---")
 if vaichon == ":red[A.(Say Vi - Nói tiếng Việt):balloon:]":
@@ -65,19 +65,25 @@ if vaichon == ":red[A.(Say Vi - Nói tiếng Việt):balloon:]":
     lang="vi-VN"
     lang_src='vi'
     lang_dest='en'
-else:
+elif vaichon==":green[B.(Say En - Nói tiếng Anh):sunflower:]":
     st.write(":blue[Selected - Đã chọn:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]" + ":blue[(Say something...)]")
     lang="en_US"
     lang_src='en'
     lang_dest='vi'
+else:    
+    st.write("")
+    lang=""
+    lang_src=''
+    lang_dest=''
 
 #B1: ghi am giong noi va chuyen thanh text
-l_text = speech_to_text(lang)
-st.write(l_text)
-#B2: dich sang text En hoac Vi
-if l_text is not None:
-    txt_translated = textsrc_to_textdest(l_text, lang_src, lang_dest)
-    st.write(txt_translated)
-if l_text is not None:
-    audio_io = text_to_speech(txt_translated, lang_dest)
-    st.audio(audio_io, format="audio/wav",start_time=0)
+if lang != '':
+    l_text = speech_to_text(lang)
+    st.write(l_text)
+    #B2: dich sang text En hoac Vi
+    if l_text is not None:
+        txt_translated = textsrc_to_textdest(l_text, lang_src, lang_dest)
+        st.write(txt_translated)
+    if l_text is not None:
+        audio_io = text_to_speech(txt_translated, lang_dest)
+        st.audio(audio_io, format="audio/wav",start_time=0)
