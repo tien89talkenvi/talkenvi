@@ -1,6 +1,5 @@
 streamlit
 SpeechRecognition
-Pyaudio
 gTTS
 googletrans-py
 
