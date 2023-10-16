@@ -9,14 +9,10 @@
 #la url app moi talkenvi
 import streamlit as st
 import speech_recognition as sr 
-#import pyaudio
+import pyaudio
 from googletrans import Translator 
 from gtts import gTTS   
 from io import BytesIO  
-import sounddevice as sd
-import wavio
-
-
 #from IPython.display import Audio   #cho txt to speech
 #import base64   #cho txt to speech
 
@@ -24,25 +20,11 @@ def speech_to_text(lang):
     # Create a speech recognition object
     recognizer = sr.Recognizer()
     # Record speech using the microphone
-    fs = 44100  # Tần số mẫu (số mẫu trên giây)
-    duration = 5  # Thời gian ghi âm (s)
-
-    #st.write("(Đang ghi âm...)")
-    audio_data = sd.rec(int(fs * duration), samplerate=fs, channels=2, dtype="float32")
-    sd.wait()
-    wavio.write('a.wav', audio_data, fs, sampwidth=2)
-    #st.write("(Hoàn thành ghi âm.)")
-
-    #with sr.Microphone() as source:
-    #    audio = recognizer.listen(source)
+    with sr.Microphone() as source:
+        audio = recognizer.listen(source)
     # Convert speech to text
-    wav_file='a.wav'
-    audio_file = sr.AudioFile(wav_file)
-    with audio_file as source:
-        audio_data = recognizer.record(source)
-
     try:
-        text = recognizer.recognize_google(audio_data, language=lang)
+        text = recognizer.recognize_google(audio, language=lang)
         #st.write(text)
         return text
     except sr.UnknownValueError:
