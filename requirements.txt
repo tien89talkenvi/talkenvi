@@ -3,3 +3,4 @@ gTTS==2.4.0
 sounddevice
 SpeechRecognition==3.10.0
 streamlit==1.27.2
+wavio
