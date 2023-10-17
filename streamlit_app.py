@@ -17,7 +17,14 @@ from io import BytesIO
 #import base64   #cho txt to speech
 #st.audio(audio_bytes, format="audio/wav")
 
+microphone_enabled = False
+
+
 def speech_to_text(lang):
+    global microphone_enabled
+    if not microphone_enabled:
+         microphone_enabled = True
+         
     if lang=="vi-VN":
         audio_bytesa = audio_recorder(text='A.(Say in Vi - Nói bằng tiếng Việt):',recording_color="#FFFF00",neutral_color="#696969",icon_size="2x")
         if audio_bytesa:
