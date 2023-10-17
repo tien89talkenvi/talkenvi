@@ -1,8 +1,6 @@
-av==9.2.0
-deepspeech==0.9.3
-numpy==1.23.0
-pydub==0.25.1
-streamlit==1.20.0
-streamlit_webrtc==0.45.0
-twilio~=8.1.0
+audio-recorder-streamlit==0.0.8
+googletrans==4.0.0rc1
+gTTS==2.4.0
+SpeechRecognition==3.10.0
+streamlit==1.27.2
 
