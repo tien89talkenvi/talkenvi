@@ -19,7 +19,7 @@ from io import BytesIO
 
 def speech_to_text(lang):
     if lang=="vi-VN":
-        audio_bytesa = audio_recorder(text='A.(Say in Vi - Nói bằng tiếng Việt):',recording_color="#FFFF00",neutral_color="#696969",icon_size="1x")
+        audio_bytesa = audio_recorder(text='A.(Say in Vi - Nói bằng tiếng Việt):',recording_color="#FFFF00",neutral_color="#696969",icon_size="2x")
         if audio_bytesa:
             with open('thua.wav','wb') as fa:
                 fa.write(audio_bytesa)
@@ -34,7 +34,7 @@ def speech_to_text(lang):
                 except sr.RequestError as e:
                     print(f"Lỗi: {e}")
     else:
-        audio_bytesb = audio_recorder(text='B.(Say in En - Nói bằng tiếng Anh):',recording_color="#0000FF",neutral_color="#696969",icon_size="1x")
+        audio_bytesb = audio_recorder(text='B.(Say in En - Nói bằng tiếng Anh):',recording_color="#0000FF",neutral_color="#696969",icon_size="2x")
         if audio_bytesb:
             with open('thub.wav','wb') as fb:
                 fb.write(audio_bytesb)
