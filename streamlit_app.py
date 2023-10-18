@@ -13,7 +13,7 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
-from pygame import mixer  
+import pygame
 import tempfile
 import os
 #from IPython.display import Audio   #cho txt to speech
@@ -61,6 +61,8 @@ def textsrc_to_textdest(l_text, lang_src,lang_dest):
     return translation.text
 
 def text_to_speech(text, lang='vi'):
+    pygame.init()
+
     try:
         tts = gTTS(text, lang=lang)
         data_io = BytesIO()
@@ -70,11 +72,10 @@ def text_to_speech(text, lang='vi'):
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
             f.write(mp3_bytes)
             audio_file = f.name
-            mixer.init()
-            mixer.music.load(audio_file)
-            mixer.music.play() 
+            pygame.mixer.music.load(audio_file)
+            pygame.mixer.music.play() 
             os.unlink(audio_file)
-
+        pygame.quit()
         return data_io
         #st.success("Chuyển văn bản thành giọng nói thành công!")
         
