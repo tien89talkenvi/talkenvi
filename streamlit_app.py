@@ -112,6 +112,6 @@ if lang != '':
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
             f.write(mp3_bytes)
             audio_file = f.name
-        pygame.mixer.init()
+        #pygame.mixer.init()
         sound = pygame.mixer.Sound(audio_file) 
         sound.play()
