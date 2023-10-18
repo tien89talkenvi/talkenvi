@@ -58,8 +58,6 @@ def textsrc_to_textdest(l_text, lang_src,lang_dest):
     return translation.text
 
 def text_to_speech(text, lang='vi'):
-    pygame.init()
-
     try:
         tts = gTTS(text, lang=lang)
         data_io = BytesIO()
