@@ -1,7 +1,6 @@
 audio-recorder-streamlit==0.0.8
 googletrans==4.0.0rc1
 gTTS==2.4.0
-pygame==2.5.2
 SpeechRecognition==3.10.0
 streamlit==1.27.2
 

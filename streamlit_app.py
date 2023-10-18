@@ -13,9 +13,6 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
-import pygame
-import tempfile
-import os
 #from IPython.display import Audio   #cho txt to speech
 #import base64   #cho txt to speech
 #st.audio(audio_bytes, format="audio/wav")
