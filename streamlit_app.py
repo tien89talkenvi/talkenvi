@@ -66,6 +66,15 @@ def text_to_speech(text, lang='vi'):
         data_io = BytesIO()
         tts.write_to_fp(data_io)
         data_io.seek(0)
+        mp3_bytes = data_io.getvalue()
+        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
+            f.write(mp3_bytes)
+            audio_file = f.name
+            mixer.init()
+            mixer.music.load(audio_file)
+            mixer.music.play() 
+            os.unlink(audio_file)
+
         return data_io
         #st.success("Chuyển văn bản thành giọng nói thành công!")
         
@@ -107,12 +116,4 @@ if lang != '':
         st.write(txt_translated)
     if l_text is not None:
         audio_io = text_to_speech(txt_translated, lang_dest)
-        mp3_bytes = audio_io.getvalue()
-        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
-            f.write(mp3_bytes)
-            audio_file = f.name
-        mixer.init()
-        mixer.music.load(audio_file)
-        mixer.music.play() 
-        os.unlink(audio_file)
         st.audio(audio_io, format="audio/wav",start_time=0)
