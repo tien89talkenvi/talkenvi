@@ -13,7 +13,7 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
-from pygame import mixer 
+import pygame 
 import tempfile
 
 #from IPython.display import Audio   #cho txt to speech
@@ -112,6 +112,6 @@ if lang != '':
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
             f.write(mp3_bytes)
             audio_file = f.name
-        mixer.init()
-        sound = mixer.Sound(audio_file) 
+        pygame.mixer.init()
+        sound = pygame.mixer.Sound(audio_file) 
         sound.play()
