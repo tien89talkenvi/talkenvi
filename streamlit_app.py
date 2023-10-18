@@ -72,10 +72,9 @@ def text_to_speech(text, lang='vi'):
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
             f.write(mp3_bytes)
             audio_file = f.name
-            pygame.mixer.music.load(audio_file)
-            pygame.mixer.music.play() 
-            os.unlink(audio_file)
-        pygame.quit()
+        my_sound = pygame.mixer.Sound(audio_file)
+        my_sound.play()
+        os.unlink(audio_file)
         return data_io
         #st.success("Chuyển văn bản thành giọng nói thành công!")
         
