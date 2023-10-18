@@ -11,22 +11,19 @@ import streamlit as st
 import speech_recognition as sr 
 from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-streamlit
 from googletrans import Translator 
-from gtts import gTTS   
+from gtts import gTTS, gTTSError   
 from io import BytesIO  
+from pygame import mixer 
+import tempfile
+
 #from IPython.display import Audio   #cho txt to speech
 #import base64   #cho txt to speech
 #st.audio(audio_bytes, format="audio/wav")
 
-microphone_enabled = False
-
-
 def speech_to_text(lang):
-    global microphone_enabled
-    if not microphone_enabled:
-         microphone_enabled = True
-         
+    #red="#FF0000" , blue="#0000FF" , yellow="#FFFF00"     
     if lang=="vi-VN":
-        audio_bytesa = audio_recorder(text='A.(Say in Vi - Nói bằng tiếng Việt):',recording_color="#FFFF00",neutral_color="#696969",icon_size="2x")
+        audio_bytesa = audio_recorder(text='A.(Say in Vi - Nói bằng tiếng Việt):',recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x")
         if audio_bytesa:
             with open('thua.wav','wb') as fa:
                 fa.write(audio_bytesa)
@@ -40,8 +37,8 @@ def speech_to_text(lang):
                     st.write("Không thể xác định giọng nói.")
                 except sr.RequestError as e:
                     print(f"Lỗi: {e}")
-    else:
-        audio_bytesb = audio_recorder(text='B.(Say in En - Nói bằng tiếng Anh):',recording_color="#0000FF",neutral_color="#696969",icon_size="2x")
+    elif lang=="en_US":
+        audio_bytesb = audio_recorder(text='B.(Say in En - Nói bằng tiếng Anh):',recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x")
         if audio_bytesb:
             with open('thub.wav','wb') as fb:
                 fb.write(audio_bytesb)
@@ -69,17 +66,23 @@ def text_to_speech(text, lang='vi'):
         audio_io = BytesIO()
         tts.write_to_fp(audio_io)
         audio_io.seek(0)
+        mp3_bytes = audio_io.getvalue()
+        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
+            f.write(mp3_bytes)
+            audio_file = f.name
+        mixer.init()  
+        sound = mixer.Sound(audio_file) 
+        sound.play()
         #st.success("Chuyển văn bản thành giọng nói thành công!")
         return audio_io
-    except Exception as e:
-        #st.error(f"Lỗi: {e}")
-        return None
-
+    except gTTSError as err:
+        st.error(err)
+    
 
 #######################################################
 st.subheader(":blue[Trò chuyện bằng tiếng Việt, Anh - Talk in Vietnamese, English]")
 vaichon = st.radio(":green[Select one of options:]", 
-                [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]","STOP"], 
+                [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":blue[B.(Say En - Nói tiếng Anh):sunflower:]","STOP"], 
                 index=2,horizontal=True ) 
 
 st.write("---")
@@ -88,7 +91,7 @@ if vaichon == ":red[A.(Say Vi - Nói tiếng Việt):balloon:]":
     lang="vi-VN"
     lang_src='vi'
     lang_dest='en'
-elif vaichon==":green[B.(Say En - Nói tiếng Anh):sunflower:]":
+elif vaichon==":blue[B.(Say En - Nói tiếng Anh):sunflower:]":
     #st.write(":blue[Selected - Đã chọn:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]" + ":blue[(Say something...)]")
     lang="en_US"
     lang_src='en'
@@ -100,6 +103,7 @@ else:
     lang_dest=''
 
 #B1: ghi am giong noi va chuyen thanh text
+
 if lang != '':
     l_text = speech_to_text(lang)
     st.write(l_text)
