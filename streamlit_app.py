@@ -61,21 +61,14 @@ def textsrc_to_textdest(l_text, lang_src,lang_dest):
     return translation.text
 
 def text_to_speech(text, lang='vi'):
-    mixer.init()
     try:
         tts = gTTS(text, lang=lang)
         data_io = BytesIO()
         tts.write_to_fp(data_io)
         data_io.seek(0)
-        mp3_bytes = data_io.getvalue()
-        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
-            f.write(mp3_bytes)
-            audio_file = f.name
-          
-        sound = mixer.Sound(audio_file) 
-        sound.play()
-        #st.success("Chuyển văn bản thành giọng nói thành công!")
         return data_io
+        #st.success("Chuyển văn bản thành giọng nói thành công!")
+        
     except gTTSError as err:
         st.error(err)
     
@@ -115,3 +108,10 @@ if lang != '':
     if l_text is not None:
         audio_io = text_to_speech(txt_translated, lang_dest)
         st.audio(audio_io, format="audio/wav",start_time=0)
+        mp3_bytes = audio_io.getvalue()
+        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as f:
+            f.write(mp3_bytes)
+            audio_file = f.name
+        mixer.init()
+        sound = mixer.Sound(audio_file) 
+        sound.play()
