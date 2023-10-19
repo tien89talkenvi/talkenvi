@@ -13,9 +13,9 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
-import numpy as np
-import soundfile as sf
-import sounddevice as sd
+#import numpy as np
+#import soundfile as sf
+#import sounddevice as sd
 
 
 def speech_to_text(lang):
@@ -65,11 +65,10 @@ def text_to_speech(text, lang='vi'):
         tts.write_to_fp(data_io)
         data_io.seek(0)
         #chuyen data_io sang nparray am thanh nho sf roi choi nparray nho sd
-        data, samplerate = sf.read(data_io)
-        sd.play(data, samplerate)
-        sd.wait()        
+        #data, samplerate = sf.read(data_io)
+        #sd.play(data, samplerate)
+        #sd.wait()        
         return data_io
-        #st.success("Chuyển văn bản thành giọng nói thành công!")
     except gTTSError as err:
         st.error(err)
     
