@@ -13,8 +13,10 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
+import numpy as np
 import soundfile as sf
 import sounddevice as sd
+
 
 def speech_to_text(lang):
     #red="#FF0000" , blue="#0000FF" , yellow="#FFFF00"     
