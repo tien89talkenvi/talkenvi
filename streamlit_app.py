@@ -21,7 +21,7 @@ from io import BytesIO
 def speech_to_text(lang):
     #red="#FF0000" , blue="#0000FF" , yellow="#FFFF00"     
     if lang=="vi-VN":
-        audio_bytesa = audio_recorder(text='A.(Say in Vi - Nói bằng tiếng Việt):',recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x")
+        audio_bytesa = audio_recorder(text='A.(Say in Vi - Nói bằng tiếng Việt):',recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
         if audio_bytesa:
             with open('thua.wav','wb') as fa:
                 fa.write(audio_bytesa)
@@ -36,7 +36,7 @@ def speech_to_text(lang):
                 except sr.RequestError as e:
                     print(f"Lỗi: {e}")
     elif lang=="en_US":
-        audio_bytesb = audio_recorder(text='B.(Say in En - Nói bằng tiếng Anh):',recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x")
+        audio_bytesb = audio_recorder(text='B.(Say in En - Nói bằng tiếng Anh):',recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
         if audio_bytesb:
             with open('thub.wav','wb') as fb:
                 fb.write(audio_bytesb)
@@ -74,38 +74,89 @@ def text_to_speech(text, lang='vi'):
     
 
 #######################################################
-st.subheader(":blue[Trò chuyện bằng tiếng Việt, Anh - Talk in Vietnamese, English]")
-vaichon = st.radio(":green[Select one of options:]", 
-                [":red[A.(Say Vi - Nói tiếng Việt):balloon:]", ":blue[B.(Say En - Nói tiếng Anh):sunflower:]","STOP"], 
-                index=2,horizontal=True ) 
+st.subheader(":blue[Trò chuyện tiếng Việt (có thông dịch) với...]")
+#vaichon = st.radio(":green[Select one of options to say:]", 
+#                [":orange[Vietnamse]", ":blue[English]",":green[Danish]",":orange[German]",":yellow[Taiwan]",":blue[Japanese]",":red[Korean]","CANCEL"],
+#                index=7,horizontal=True ) 
+noi_voi = st.selectbox("Chon nguoi Noi voi:", 
+                ("English (en)","Spanish (es)","Taiwan (zh-TW)","Danish (da)","German (de)","Japanese (ja)","Korean (ko)"),index=0,label_visibility="hidden")
+noi_voi=noi_voi.strip()
+sub1='('
+sub2=')'
+idx1 = noi_voi.index(sub1)
+idx2 = noi_voi.index(sub2)
+res = ''
+# getting elements in between
+for idx in range(idx1 + len(sub1), idx2):
+    res = res + noi_voi[idx]
+codelang=res
+#print(codelang)
+
+mtext1="**A** Nói tiếng Việt (Say in Vietnamese):"
+audio_bytes1 = audio_recorder(text=mtext1,recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
+if audio_bytes1:
+    txt1=''
+    txt2=''
+    txt_translated1=''
+    txt_translated2=''    
+    lang='vi'
+    lang_src='vi'
+    lang_dest=codelang
+
+    with open('thu1.wav','wb') as f1:
+        f1.write(audio_bytes1)
+        r = sr.Recognizer()
+        with sr.AudioFile('thu1.wav') as source1:
+            audio1 = r.record(source1)  # read the entire audio file
+        try:
+            text1 = r.recognize_google(audio1, language=lang)
+            st.write(text1)
+        except sr.UnknownValueError:
+            text1=''
+            st.write("")
+        except sr.RequestError as e:
+            text1=''
+            print(f"Lỗi: {e}")
+            st.write("")
+    if text1 !='':
+        txt_translated1 = textsrc_to_textdest(text1, lang_src, lang_dest)
+        st.write(txt_translated1)
+    if txt_translated1 !='':
+        audio_io = text_to_speech(txt_translated1, lang_dest)
+        st.audio(audio_io, format="audio/wav",start_time=0)
 
 st.write("---")
-if vaichon == ":red[A.(Say Vi - Nói tiếng Việt):balloon:]":
-    #st.write(":blue[Selected - Đã chọn:]", ":red[A.(Say Vi - Nói tiếng Việt):balloon:]" + ":blue[(Hãy nói gì đó...)]")
-    lang="vi-VN"
-    lang_src='vi'
-    lang_dest='en'
-elif vaichon==":blue[B.(Say En - Nói tiếng Anh):sunflower:]":
-    #st.write(":blue[Selected - Đã chọn:]", ":green[B.(Say En - Nói tiếng Anh):sunflower:]" + ":blue[(Say something...)]")
-    lang="en_US"
-    lang_src='en'
+mtext2='**B** Nói tiếng '+noi_voi+' (Say in '+noi_voi+'):'
+audio_bytes2 = audio_recorder(text=mtext2,recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
+if audio_bytes2:
+    txt1=''
+    txt2=''
+    txt_translated1=''
+    txt_translated2=''    
+
+    lang=codelang
+    lang_src=codelang
     lang_dest='vi'
-else:    
-    #st.write("")
-    lang=""
-    lang_src=''
-    lang_dest=''
 
-#B1: ghi am giong noi va chuyen thanh text
-
-if lang != '':
-    l_text = speech_to_text(lang)
-    st.write(l_text)
-    #B2: dich sang text En hoac Vi
-    if l_text is not None:
-        txt_translated = textsrc_to_textdest(l_text, lang_src, lang_dest)
-        st.write(txt_translated)
-    if l_text is not None:
-        audio_io = text_to_speech(txt_translated, lang_dest)
-        # dung de play lai neu can
+    with open('thu2.wav','wb') as f2:
+        f2.write(audio_bytes2)
+        r = sr.Recognizer()
+        with sr.AudioFile('thu2.wav') as source2:
+            audio2 = r.record(source2)  # read the entire audio file
+        try:
+            text2 = r.recognize_google(audio2, language=lang)
+            st.write(text2)
+        except sr.UnknownValueError:
+            text2=''
+            st.write("")
+        except sr.RequestError as e:
+            text2=''
+            print(f"Lỗi: {e}")
+            st.write("")
+    if text2 !='':
+        txt_translated2 = textsrc_to_textdest(text2, lang_src, lang_dest)
+        st.write(txt_translated2)
+    if txt_translated2 !='' :
+        audio_io = text_to_speech(txt_translated2, lang_dest)
         st.audio(audio_io, format="audio/wav",start_time=0)
+
