@@ -20,8 +20,9 @@ import sounddevice as sd
 import streamlit as st
 
 def speech_dich_audio(lang,lang_src,lang_dest):
+    device_index = 2
     r = sr.Recognizer()
-    with sr.Microphone() as source:
+    with sr.Microphone(device_index=device_index) as source:
         if lang != 'vi':
             st.write(":blue[Say something!...(Hãy nói gì đi...)]")
         else:
