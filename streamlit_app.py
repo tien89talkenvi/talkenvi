@@ -8,6 +8,7 @@
 #https://talkenvi-b5vypm7itcecxnkuvne7h9.streamlit.app/ 
 #la url app moi talkenvi
 # de ghi am noi va chuyen am thanh text
+import pyaudio
 import speech_recognition as sr
 # de dich
 from googletrans import Translator
