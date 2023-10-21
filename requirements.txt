@@ -3,4 +3,7 @@ googletrans==4.0.0rc1
 gTTS==2.4.0
 SpeechRecognition==3.10.0
 streamlit==1.27.2
+soundfile==0.12.1
+sounddevice==0.4.6
+
 
