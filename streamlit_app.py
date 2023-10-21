@@ -1,79 +1,65 @@
-#streamlit==1.27.2
-#SpeechRecognition==3.10.0
-#pyaudio==0.2.13 #(cho SpeechRecognition lay micro )
-#googletrans==4.0.0rc1 #(phien ban nay cho rieng py khi su dung googletrans, cac pban khac hay gay loi)
-#gTTS==2.4.0
-
-
 #https://talkenvi-b5vypm7itcecxnkuvne7h9.streamlit.app/ 
 #la url app moi talkenvi
-# de ghi am noi va chuyen am thanh text
-import pyaudio
-import speech_recognition as sr
-# de dich
-from googletrans import Translator
-#2 cai sau de chuyen text thanh am thanh
-from gtts import gTTS
-from io import BytesIO
+import streamlit as st
+import speech_recognition as sr 
+from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-streamlit
+from googletrans import Translator 
+from gtts import gTTS, gTTSError   
+from io import BytesIO  
 import soundfile as sf
 import sounddevice as sd
-import streamlit as st
 
-def speech_dich_audio(lang,lang_src,lang_dest):
-    device_index = 0
-    r = sr.Recognizer()
-    with sr.Microphone(device_index=device_index) as source:
-        if lang != 'vi':
-            st.write(":blue[Say something!...(Hãy nói gì đi...)]")
-        else:
-            st.write(":red[Say something!...(Hãy nói gì đi...)]")
-        audio = r.listen(source)
-    # recognize speech using Google Speech Recognition
-    try:
-        # for testing purposes, we're just using the default API key
-        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
-        #print("Google Speech Recognition thinks you said " + r.recognize_google(audio))
-        text_from_audio=r.recognize_google(audio,language=lang) #Lay ra text tu audio da thu qua micro voi giong viet
-        if lang != 'vi':
-            st.write(":blue["+text_from_audio+"]")
-        else:        
-            st.write(":red["+text_from_audio+"]")
-        
-        translator = Translator()
-        text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
-        if lang != 'vi':
-            st.write(":blue["+text_translated+"]")
-        else:        
-            st.write(":red["+text_translated+"]")
-        
-        mp3_fp = BytesIO()
-        tts = gTTS(text_translated, lang=lang_dest)
-        tts.write_to_fp(mp3_fp)
-        #st.write(f'<audio src="{audio_url}" autoplay="true" controls></audio>') of GPT
-        # Load `mp3_fp` as an mp3 file in
-        # the audio library of your choice
-        #chuyen doi sang dinh dang am thanh
-        mp3_fp.seek(0)
-        st.audio(mp3_fp, format="audio/wav",start_time=0)
-        # Đọc dữ liệu âm thanh từ `BytesIO` bằng thư viện soundfile
-        audio_data, sample_rate = sf.read(mp3_fp)
-        # Phát âm thanh bằng thư viện sounddevice
-        sd.play(audio_data, sample_rate)
-        sd.wait()
+def speech_text_translate_audio(lang,lang_src,lang_dest):
+    if lang == 'vi':
+        mtextX="**A** Nói tiếng Việt (Say in Vietnamese):"
+        mrecthu="#FFFF00"
+        mrecstop="#FF0000"
+    else:
+        mtextX='**B** Nói tiếng '+noi_voi+' (Say in '+noi_voi+'):'
+        mrecthu="#FFFF00"
+        mrecstop="#0000FF"
 
-        #phat am thanh tu dong
-    except sr.UnknownValueError:
-        print("Google Speech Recognition could not understand audio")
-    except sr.RequestError as e:
-        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+    audio_bytes = audio_recorder(text=mtextX,recording_color=mrecthu,neutral_color=mrecstop,icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=5.0)
+    if audio_bytes:
+        with open('thu.wav','wb') as f:
+            f.write(audio_bytes)
+            r = sr.Recognizer()
+            with sr.AudioFile('thu.wav') as source:
+                audio = r.record(source)  # read the entire audio file
+            try:
+                text_from_audio = r.recognize_google(audio, language=lang)
+                st.write(text_from_audio)
+                translator = Translator()
+                text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
+                st.write(text_translated)
+                mp3_fp = BytesIO()
+                tts = gTTS(text_translated, lang=lang_dest)
+                tts.write_to_fp(mp3_fp)
+                mp3_fp.seek(0)
+                st.audio(mp3_fp, format="audio/wav",start_time=0)
+                # Đọc dữ liệu âm thanh từ `BytesIO` bằng thư viện soundfile
+                audio_data, sample_rate = sf.read(mp3_fp)
+                # Phát âm thanh bằng thư viện sounddevice
+                sd.play(audio_data, sample_rate)
+                sd.wait()
+
+            except sr.UnknownValueError:
+                text1=''
+                st.write("")
+            except sr.RequestError as e:
+                text1=''
+                print(f"Lỗi: {e}")
+                st.write("")
 
 
-##### MAIN ##################################################
-st.subheader(":blue[Trò chuyện (có thông dịch) bằng tiếng Việt và tiếng...]")
+#######################################################
+st.subheader(":blue[Trò chuyện tiếng Việt (có thông dịch) với...]")
+#vaichon = st.radio(":green[Select one of options to say:]", 
+#                [":orange[Vietnamse]", ":blue[English]",":green[Danish]",":orange[German]",":yellow[Taiwan]",":blue[Japanese]",":red[Korean]","CANCEL"],
+#                index=7,horizontal=True ) 
 noi_voi = st.selectbox("Chon nguoi Noi voi:", 
                 ("English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)"),index=0,label_visibility="hidden")
-#noi_voi=noi_voi.strip()
+noi_voi=noi_voi.strip()
 sub1='('
 sub2=')'
 idx1 = noi_voi.index(sub1)
@@ -84,10 +70,12 @@ for idx in range(idx1 + len(sub1), idx2):
     res = res + noi_voi[idx]
 codelang=res
 #print(codelang)
-
+####
 vaichon = st.radio(":green[Select one of options to say:]", 
                 [":red[Vietnamse]", ":blue["+noi_voi+"]","Clear (Xóa)"],
-                index=0,horizontal=True ) 
+                index=2,horizontal=True ) 
+st.write("---")
+
 if vaichon=="Clear (Xóa)":
     st.write("")
 else:
@@ -95,9 +83,10 @@ else:
         lang='vi'
         lang_src='vi'
         lang_dest=codelang
+        speech_text_translate_audio(lang,lang_src,lang_dest)
     else:        
         lang=codelang
         lang_src=codelang
         lang_dest='vi'
+        speech_text_translate_audio(lang,lang_src,lang_dest)
 
-    speech_dich_audio(lang,lang_src,lang_dest)
