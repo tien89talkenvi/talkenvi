@@ -53,7 +53,8 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
         except sr.RequestError as e:
-            print(f"Lỗi: {e}")
+            st.write("Sorry!!")
+            #print(f"Lỗi: {e}")
 
 #######################################################
 st.subheader(":blue[Trò chuyện có thông dịch bằng tiếng Việt và tiếng...]")
