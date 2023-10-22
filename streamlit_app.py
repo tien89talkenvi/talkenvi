@@ -38,7 +38,7 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
                 # tu 1 trang app web cu a nguoi Hoa toi lay va phat thanh cong
                 audio_placeholder = st.empty()
                 contents = mp3_fp.read()
-                #mp3_fp.close()
+                mp3_fp.close()
                 audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
                 audio_html = """
                                 <audio autoplay=True>
@@ -46,7 +46,7 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
                                 Your browser does not support the audio element.
                                 </audio>
                             """ %audio_str
-                #audio_placeholder.empty()
+                audio_placeholder.empty()
                 time.sleep(0.5) 
                 audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
                 # Cam on ng Hoa
