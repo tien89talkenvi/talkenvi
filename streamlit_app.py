@@ -14,8 +14,8 @@ from googletrans import Translator
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
 import time
-import base64
 
+import pybase64
 
 def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
     with open('thu.wav','wb') as f:
@@ -40,7 +40,7 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
                 audio_placeholder = st.empty()
                 contents = mp3_fp.read()
                 mp3_fp.close()
-                audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
+                audio_str = "data:audio/ogg;base64,%s"%(pybase64.standard_b64decode(contents).decode())
                 audio_html = """
                                 <audio autoplay=True>
                                 <source src="%s" type="audio/ogg" autoplay=True>
