@@ -20,41 +20,41 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
     with open('thu.wav','wb') as f:
         f.write(audio_bytes)
         r = sr.Recognizer()
-        with sr.AudioFile('thu.wav') as source:
-            audio = r.record(source)  # read the entire audio file
-        try:
-            text_from_audio = r.recognize_google(audio, language=lang_sp)
-            st.write(text_from_audio)
-            if text_from_audio != '':
-                translator = Translator()
-                text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
-                st.write(text_translated)
-            if text_translated !='':
-                mp3_fp = BytesIO()
-                tts = gTTS(text_translated, lang=lang_dest)
-                tts.write_to_fp(mp3_fp)
-                mp3_fp.seek(0)
-                st.audio(mp3_fp, format="audio/wav",start_time=0)
-                # tu 1 trang app web cu a nguoi Hoa toi lay va phat thanh cong
-                #audio_placeholder = st.empty()
-                #contents = mp3_fp.read()
-                #mp3_fp.close()
-                #audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
-                #audio_html = """
-                #                <audio autoplay=True>
-                #                <source src="%s" type="audio/ogg" autoplay=True>
-                #                Your browser does not support the audio element.
-                #                </audio>
-                #            """ %audio_str
-                #audio_placeholder.empty()
-                #time.sleep(0.5) 
-                #audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
-                # Cam on ng Hoa
-        except sr.UnknownValueError:
-            st.write("Không nhận thức được tiếng nói")
-        except sr.RequestError as e:
-            st.write("Sorry!!")
-            #print(f"Lỗi: {e}")
+    with sr.AudioFile('thu.wav') as source:
+        audio = r.record(source)  # read the entire audio file
+    try:
+        text_from_audio = r.recognize_google(audio, language=lang_sp)
+        st.write(text_from_audio)
+        if text_from_audio != '':
+            translator = Translator()
+            text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
+            st.write(text_translated)
+        if text_translated !='':
+            mp3_fp = BytesIO()
+            tts = gTTS(text_translated, lang=lang_dest)
+            tts.write_to_fp(mp3_fp)
+            mp3_fp.seek(0)
+            st.audio(mp3_fp, format="audio/wav",start_time=0)
+            # tu 1 trang app web cu a nguoi Hoa toi lay va phat thanh cong
+            #audio_placeholder = st.empty()
+            #contents = mp3_fp.read()
+            #mp3_fp.close()
+            #audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
+            #audio_html = """
+            #                <audio autoplay=True>
+            #                <source src="%s" type="audio/ogg" autoplay=True>
+            #                Your browser does not support the audio element.
+            #                </audio>
+            #            """ %audio_str
+            #audio_placeholder.empty()
+            #time.sleep(0.5) 
+            #audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
+            # Cam on ng Hoa
+    except sr.UnknownValueError:
+        st.write("Không nhận thức được tiếng nói")
+    except sr.RequestError as e:
+        st.write("Sorry!!")
+        #print(f"Lỗi: {e}")
 
 #######################################################
 st.subheader(":blue[Trò chuyện có thông dịch bằng tiếng Việt và tiếng...]")
