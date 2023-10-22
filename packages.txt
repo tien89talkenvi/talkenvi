@@ -1,2 +1,2 @@
-python3.11-dev
-portaudio19.7-dev 
+python3-all-dev
+portaudio19-dev 
