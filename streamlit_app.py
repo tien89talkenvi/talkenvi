@@ -34,11 +34,11 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
                 tts = gTTS(text_translated, lang=lang_dest)
                 tts.write_to_fp(mp3_fp)
                 mp3_fp.seek(0)
-                #st.audio(mp3_fp, format="audio/wav",start_time=0)
+                st.audio(mp3_fp, format="audio/wav",start_time=0)
                 # tu 1 trang app web cu a nguoi Hoa toi lay va phat thanh cong
                 audio_placeholder = st.empty()
                 contents = mp3_fp.read()
-                mp3_fp.close()
+                #mp3_fp.close()
                 audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
                 audio_html = """
                                 <audio autoplay=True>
