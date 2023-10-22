@@ -46,7 +46,7 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
                                 Your browser does not support the audio element.
                                 </audio>
                             """ %audio_str
-                audio_placeholder.empty()
+                #audio_placeholder.empty()
                 time.sleep(0.5) 
                 audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
                 # Cam on ng Hoa
