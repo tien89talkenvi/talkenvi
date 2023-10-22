@@ -36,19 +36,19 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
                 mp3_fp.seek(0)
                 st.audio(mp3_fp, format="audio/wav",start_time=0)
                 # tu 1 trang app web cu a nguoi Hoa toi lay va phat thanh cong
-                audio_placeholder = st.empty()
-                contents = mp3_fp.read()
-                mp3_fp.close()
-                audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
-                audio_html = """
-                                <audio autoplay=True>
-                                <source src="%s" type="audio/ogg" autoplay=True>
-                                Your browser does not support the audio element.
-                                </audio>
-                            """ %audio_str
-                audio_placeholder.empty()
-                time.sleep(0.5) 
-                audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
+                #audio_placeholder = st.empty()
+                #contents = mp3_fp.read()
+                #mp3_fp.close()
+                #audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
+                #audio_html = """
+                #                <audio autoplay=True>
+                #                <source src="%s" type="audio/ogg" autoplay=True>
+                #                Your browser does not support the audio element.
+                #                </audio>
+                #            """ %audio_str
+                #audio_placeholder.empty()
+                #time.sleep(0.5) 
+                #audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
                 # Cam on ng Hoa
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
