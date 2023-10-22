@@ -9,8 +9,8 @@ from io import BytesIO
 import soundfile as sf
 import sounddevice as sd
 
-def speech_text_translate_audio(lang,lang_src,lang_dest):
-    if lang == 'vi':
+def speech_text_translate_audio(lang_sp,lang_src,lang_dest):
+    if lang_sp == 'vi':
         mtextX="**A** Nói tiếng Việt (Say in Vietnamese):"
         mrecthu="#FFFF00"
         mrecstop="#FF0000"
@@ -27,7 +27,7 @@ def speech_text_translate_audio(lang,lang_src,lang_dest):
             with sr.AudioFile('thu.wav') as source:
                 audio = r.record(source)  # read the entire audio file
             try:
-                text_from_audio = r.recognize_google(audio, language=lang)
+                text_from_audio = r.recognize_google(audio, language=lang_sp)
                 st.write(text_from_audio)
                 translator = Translator()
                 text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
@@ -80,13 +80,13 @@ if vaichon=="Clear (Xóa)":
     st.write("")
 else:
     if vaichon==":red[Vietnamse]":
-        lang='vi'
+        lang_sp='vi'
         lang_src='vi'
         lang_dest=codelang
-        speech_text_translate_audio(lang,lang_src,lang_dest)
+        speech_text_translate_audio(lang_sp,lang_src,lang_dest)
     else:        
-        lang=codelang
+        lang_sp=codelang
         lang_src=codelang
         lang_dest='vi'
-        speech_text_translate_audio(lang,lang_src,lang_dest)
+        speech_text_translate_audio(lang_sp,lang_src,lang_dest)
 
