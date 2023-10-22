@@ -48,7 +48,7 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
                                 </audio>
                             """ %audio_str
                 audio_placeholder.empty()
-                time.sleep(0.2) 
+                time.sleep(0.5) 
                 audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
                 # Cam on ng Hoa
         except sr.UnknownValueError:
