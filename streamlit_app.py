@@ -33,7 +33,7 @@ def speech_text_translate_audio(lang_sp,lang_src,lang_dest):
                 text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
                 st.write(text_translated)
                 mp3_fp = BytesIO()
-                tts = gTTS(text_translated, lang=lang_dest)
+                tts = gTTS(text_translated, lang=lang_sp)
                 tts.write_to_fp(mp3_fp)
                 mp3_fp.seek(0)
                 st.audio(mp3_fp, format="audio/wav",start_time=0)
