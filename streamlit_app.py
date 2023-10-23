@@ -13,8 +13,9 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
-import time
+import streamlit.components.v1 as stc
 import base64
+import time
 
 def auto_phat_audio(mp3_fp):
     # khi ham nay chay thi mp3_fp nhu 1 tệp mp3/wav sẽ được tải và dữ liệu âm thanh được chuyển đổi 
