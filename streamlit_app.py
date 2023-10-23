@@ -16,6 +16,28 @@ from io import BytesIO
 import time
 import base64
 
+def auto_phat_audio(mp3_fp):
+    # khi ham nay chay thi mp3_fp nhu 1 tệp mp3/wav sẽ được tải và dữ liệu âm thanh được chuyển đổi 
+    # thành văn bản bằng base64. Việc phát lại âm thanh được thực hiện trên ứng dụng bằng cách 
+    # chỉ định văn bản đã chuyển đổi làm nguồn của thẻ âm thanh HTML. 
+    # Chìa khóa ở đây là chỉ định ``autoplay=True'' trong thẻ âm thanh. 
+    # Với thông số kỹ thuật này, âm thanh sẽ được tự động phát khi ứng dụng chạy.
+    audio_placeholder = st.empty()
+    #file_ = open(audio_path, "rb") #no mo roi
+    contents = mp3_fp.read()
+    mp3_fp.close()
+    #<audio autoplay=True> #cai nay thay vao duoi thi no khong co thanh bar 
+    audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
+    audio_html = """
+                    <audio controls autoplay=True controlslist="nodownload">
+                    <source src="%s" type="audio/ogg" autoplay=True>
+                    Your browser does not support the audio element.
+                    </audio>
+                """ %audio_str
+    audio_placeholder.empty()
+    time.sleep(0.5) #
+    audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
+
 def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
     with open('thu.wav','wb') as f:
         f.write(audio_bytes)
@@ -34,22 +56,8 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
             tts = gTTS(text_translated, lang=lang_dest)
             tts.write_to_fp(mp3_fp)
             mp3_fp.seek(0)
-            st.audio(mp3_fp, format="audio/wav",start_time=0)
-            # tu 1 trang app web cu a nguoi Hoa toi lay va phat thanh cong
-            #audio_placeholder = st.empty()
-            #contents = mp3_fp.read()
-            #mp3_fp.close()
-            #audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
-            #audio_html = """
-            #                <audio autoplay=True>
-            #                <source src="%s" type="audio/ogg" autoplay=True>
-            #                Your browser does not support the audio element.
-            #                </audio>
-            #            """ %audio_str
-            #audio_placeholder.empty()
-            #time.sleep(0.5) 
-            #audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
-            # Cam on ng Hoa
+            #st.audio(mp3_fp, format="audio/wav",start_time=0)
+            auto_phat_audio(mp3_fp)
     except sr.UnknownValueError:
         st.write("Không nhận thức được tiếng nói")
     except sr.RequestError as e:
