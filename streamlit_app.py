@@ -13,7 +13,6 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
-import streamlit.components.v1 as stc
 import base64
 import time
 
@@ -27,10 +26,10 @@ def auto_phat_audio(mp3_fp):
     #file_ = open(audio_path, "rb") #no mo roi
     contents = mp3_fp.read()
     #file_.close()
-    #<audio autoplay=True> #cai nay thay vao duoi thi no khong co thanh bar 
+    #<audio controls autoplay=True controlslist="nodownload"> #cai nay thay vao duoi thi no se co thanh bar 
     audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
     audio_html = """
-                    <audio controls autoplay=True controlslist="nodownload">
+                    <audio autoplay=True>
                     <source src="%s" type="audio/ogg" autoplay=True>
                     Your browser does not support the audio element.
                     </audio>
