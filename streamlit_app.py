@@ -17,16 +17,16 @@ import streamlit.components.v1 as stc
 import base64
 import time
 
-def auto_phat_audio(audio_path):
+def auto_phat_audio(mp3_fp):
     # khi ham nay chay thi mp3_fp nhu 1 tệp mp3/wav sẽ được tải và dữ liệu âm thanh được chuyển đổi 
     # thành văn bản bằng base64. Việc phát lại âm thanh được thực hiện trên ứng dụng bằng cách 
     # chỉ định văn bản đã chuyển đổi làm nguồn của thẻ âm thanh HTML. 
     # Chìa khóa ở đây là chỉ định ``autoplay=True'' trong thẻ âm thanh. 
     # Với thông số kỹ thuật này, âm thanh sẽ được tự động phát khi ứng dụng chạy.
     audio_placeholder = st.empty()
-    file_ = open(audio_path, "rb") #no mo roi
-    contents = file_.read()
-    #file_.close()
+    #file_ = open(audio_path, "rb") #no mo roi
+    contents = mp3_fp.read()
+    #mp3_fp.close()
     #<audio controls autoplay=True controlslist="nodownload"> #cai nay thay vao duoi thi no se co thanh bar 
     audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
     audio_html = """
@@ -57,8 +57,8 @@ def thuam_txt_dichtxt_phatam(audio_bytes,lang_sp,lang_src,lang_dest):
             tts = gTTS(text_translated, lang=lang_dest)
             tts.write_to_fp(mp3_fp)
             mp3_fp.seek(0)
-            st.audio(mp3_fp, format="audio/wav",start_time=0)
             auto_phat_audio(mp3_fp)
+            st.audio(mp3_fp, format="audio/wav",start_time=0)
     except sr.UnknownValueError:
         st.write("Không nhận thức được tiếng nói")
     except sr.RequestError as e:
