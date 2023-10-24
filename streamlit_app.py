@@ -56,13 +56,10 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
             if text_translated !='':
                 mp3_fp = BytesIO()
                 tts = gTTS(text_translated, lang=lang_dest)
-                #tts.write_to_fp(mp3_fp)
-                #mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
-                #auto_phat_audio(mp3_fp)
-                #st.audio(mp3_fp, format="audio/wav",start_time=0)
-                tts.save("welcome.mp3") 
-                # Playing the converted file 
-                os.system("mpg321 welcome.mp3") 
+                tts.write_to_fp(mp3_fp)
+                mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
+                auto_phat_audio(mp3_fp)
+                st.audio(mp3_fp, format="audio/wav",start_time=0)
 
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
