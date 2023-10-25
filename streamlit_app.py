@@ -36,7 +36,7 @@ def auto_phat_audio(mp3_fp):
                     </audio>""" %audio_str
                 
     audio_placeholder.empty()
-    time.sleep(0.2) #
+    time.sleep(2) #
     audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
 
     
