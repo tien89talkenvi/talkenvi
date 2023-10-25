@@ -38,17 +38,11 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
         audio = r.record(source)  # read the entire audio file
         try:
             text_from_audio = r.recognize_google(audio, language=lang_sp)
-            if lang_sp=='vi':
-                st.write(":red["+text_from_audio+"]")
-            else:
-                st.write(":blue["+text_from_audio+"]")
+            st.write(text_from_audio)
             if text_from_audio != '':
                 translator = Translator()
                 text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
-            if lang_dest=='vi':
-                st.write(":red["+text_translated+"]")
-            else:
-                st.write(":blue["+text_translated+"]")
+                st.write(text_translated)
             if text_translated !='':
                 mp3_fp = BytesIO()
                 tts = gTTS(text_translated, lang=lang_dest)
