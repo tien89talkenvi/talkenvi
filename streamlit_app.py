@@ -24,7 +24,7 @@ def pygame_play_audio(temp_wav_file):
     screen = pygame.display.set_mode((200, 100))
     # Tải tệp âm thanh
     sound = pygame.mixer.Sound(temp_wav_file)
-    st.audio(temp_wav_file, format="audio/wav",start_time=0)
+    #st.audio(temp_wav_file, format="audio/wav",start_time=0)
     # Phát âm thanh
     sound.play()
     # Đợi cho đến khi âm thanh kết thúc
