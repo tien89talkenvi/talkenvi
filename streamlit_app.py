@@ -27,7 +27,7 @@ def auto_phat_audio(mp3_fp):
         </audio>
         """
     audio_placeholder.empty()
-    time.sleep(0.2) 
+    time.sleep(0.5) 
     audio_placeholder.markdown(md,unsafe_allow_html=True)
 
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
