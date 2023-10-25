@@ -16,22 +16,7 @@ from io import BytesIO
 import streamlit.components.v1 as stc
 import base64
 import time
-import pygame
-from pydub import AudioSegment
 
-def pygame_play_audio(temp_wav_file):
-    pygame.init()
-    # Tạo một cửa sổ trống (không cần hiển thị cửa sổ, chỉ cần để pygame hoạt động)
-    screen = pygame.display.set_mode((200, 100))
-    # Tải tệp âm thanh
-    sound = pygame.mixer.Sound(temp_wav_file)
-    #st.audio(temp_wav_file, format="audio/wav",start_time=0)
-    # Phát âm thanh
-    sound.play()
-    # Đợi cho đến khi âm thanh kết thúc
-    pygame.time.delay(3000)  # Thời gian đợi (đơn vị là mili giây)
-    # Dừng pygame
-    pygame.quit()
 
 def auto_phat_audio(mp3_fp):
     # khi ham nay chay thi mp3_fp nhu 1 tệp mp3/wav sẽ được tải và dữ liệu âm thanh được chuyển đổi 
@@ -72,17 +57,10 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                 # gTTS dich text ra text lang 2 roi tra ve kq la tts text lang2
                 tts = gTTS(text_translated, lang=lang_dest)
                 # ghi kq nay vao mp3_fp
-                #tts.write_to_fp(mp3_fp)
-                #mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
-                #st.audio(mp3_fp, format="audio/wav",start_time=0)
-                temp_mp3_file='out.mp3'
-                tts.save(temp_mp3_file)
-                temp_wav_file='out.wav'
-                # convert mp3 to wav                                                            
-                sound = AudioSegment.from_mp3(temp_mp3_file)
-                sound.export(temp_wav_file, format="wav")
-                pygame_play_audio(temp_wav_file)
-                #auto_phat_audio(mp3_fp)
+                tts.write_to_fp(mp3_fp)
+                mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
+                st.audio(mp3_fp, format="audio/wav",start_time=0)
+                auto_phat_audio(mp3_fp)
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
         except sr.RequestError as e:
