@@ -13,30 +13,22 @@ from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
-import streamlit.components.v1 as stc
+#import streamlit.components.v1 as stc
 import base64
 import time
 
-
 def auto_phat_audio(mp3_fp):
-    # khi ham nay chay thi mp3_fp nhu 1 tệp mp3/wav sẽ được tải và dữ liệu âm thanh được chuyển đổi 
-    # thành văn bản bằng base64. Việc phát lại âm thanh được thực hiện trên ứng dụng bằng cách 
-    # chỉ định văn bản đã chuyển đổi làm nguồn của thẻ âm thanh HTML. 
-    # Chìa khóa ở đây là chỉ định ``autoplay=True'' trong thẻ âm thanh. 
-    # Với thông số kỹ thuật này, âm thanh sẽ được tự động phát khi ứng dụng chạy.
-    audio_placeholder = st.empty()
-    contents = mp3_fp.read()
-    # ghichu: <audio controls autoplay=True controlslist="nodownload"> #cai nay thay vao duoi thi no se co thanh bar 
-    audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
-    audio_html = """
-                    <audio autoplay=True>
-                    <source src="%s" type="audio/mpeg" >
-                    Your browser does not support the audio element.
-                    </audio>""" %audio_str
+    audio_placeholder=st.empty()
+    data = mp3_fp.read()
+    b64 = base64.b64encode(data).decode()
+    md = f"""
+        <audio controls autoplay="true">
+        <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+        </audio>
+        """
     audio_placeholder.empty()
-    time.sleep(0.2) #
-    audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
-
+    time.sleep(0.2) 
+    audio_placeholder.markdown(md,unsafe_allow_html=True)
     
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
     with open('thu.wav','wb') as f:
@@ -52,14 +44,11 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                 text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
                 st.write(text_translated)
             if text_translated !='':
-                # khoi dong doi tuong mp3_fp la dang BytesIO
                 mp3_fp = BytesIO()
-                # gTTS dich text ra text lang 2 roi tra ve kq la tts text lang2
                 tts = gTTS(text_translated, lang=lang_dest)
-                # ghi kq nay vao mp3_fp
                 tts.write_to_fp(mp3_fp)
                 mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
-                st.audio(mp3_fp, format="audio/wav",start_time=0)
+                #st.audio(mp3_fp, format="audio/wav",start_time=0)
                 auto_phat_audio(mp3_fp)
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
