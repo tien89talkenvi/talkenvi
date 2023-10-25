@@ -16,7 +16,10 @@ from io import BytesIO
 #import streamlit.components.v1 as stc
 import base64
 import time
-import os
+#import os
+import panel as pn
+
+pn.extension()
 
 def auto_phat_audio(mp3_fp):
     # khi ham nay chay thi mp3_fp nhu 1 tệp mp3/wav sẽ được tải và dữ liệu âm thanh được chuyển đổi 
@@ -25,21 +28,21 @@ def auto_phat_audio(mp3_fp):
     # Chìa khóa ở đây là chỉ định ``autoplay=True'' trong thẻ âm thanh. 
     # Với thông số kỹ thuật này, âm thanh sẽ được tự động phát khi ứng dụng chạy.
     audio_placeholder = st.empty()
-    #file_ = open(audio_path, "rb") #no mo roi
     contents = mp3_fp.read()
-    #mp3_fp.close()
-    #<audio controls autoplay=True controlslist="nodownload"> #cai nay thay vao duoi thi no se co thanh bar 
+    
+    # ghichu: <audio controls autoplay=True controlslist="nodownload"> #cai nay thay vao duoi thi no se co thanh bar 
     audio_str = "data:audio/ogg;base64,%s"%(base64.b64encode(contents).decode())
     audio_html = """
                     <audio autoplay=True>
-                    <source src="%s" type="audio/ogg" autoplay=True>
+                    <source src="%s" type="audio/mpeg" >
                     Your browser does not support the audio element.
-                    </audio>
-                """ %audio_str
+                    </audio>""" %audio_str
+                
     audio_placeholder.empty()
-    time.sleep(0.5) #
+    time.sleep(0.2) #
     audio_placeholder.markdown(audio_html, unsafe_allow_html=True)
 
+    
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
     with open('thu.wav','wb') as f:
         f.write(audio_bytes)
@@ -54,13 +57,16 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                 text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
                 st.write(text_translated)
             if text_translated !='':
+                # khoi dong doi tuong mp3_fp la dang BytesIO
                 mp3_fp = BytesIO()
+                # gTTS dich text ra text lang 2 roi tra ve kq la tts text lang2
                 tts = gTTS(text_translated, lang=lang_dest)
+                # ghi kq nay vao mp3_fp
                 tts.write_to_fp(mp3_fp)
                 mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
+                
                 auto_phat_audio(mp3_fp)
                 st.audio(mp3_fp, format="audio/wav",start_time=0)
-
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
         except sr.RequestError as e:
@@ -92,7 +98,7 @@ if vaichon==":red[Nói tiếng VIỆT (Vietnamese)]":
     lang_dest=codelang
     mtext="Click on mic rồi nói tiếng VIỆT (Vietnamese):"
     # Chay ham hien mic voi cac tham so va thu am roi tra ve audio_bytes thu duoc
-    audio_bytes1 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
+    audio_bytes1 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=5.0)
     if audio_bytes1:
         # chay ham Xu li audio_bytes da thu de cho ra ket qua cuoi cung la phat ra am thanh dest
         xuli_ra_phat_am_dest(audio_bytes1,lang_sp,lang_src,lang_dest)
@@ -103,7 +109,7 @@ elif vaichon==":blue[Nói tiếng "+tieng_khac+"]":
     lang_dest='vi'
     mtext='Click on mic rồi nói tiếng '+tieng_khac
     # Chay ham hien mic voi cac tham so va thu am roi tra ve audio_bytes thu duoc
-    audio_bytes2 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
+    audio_bytes2 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=5.0)
     if audio_bytes2:
         # chay ham Xu li audio_bytes da thu de cho ra ket qua cuoi cung la phat ra am thanh dest
         xuli_ra_phat_am_dest(audio_bytes2,lang_sp,lang_src,lang_dest)
