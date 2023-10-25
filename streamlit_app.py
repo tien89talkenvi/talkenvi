@@ -17,19 +17,34 @@ from io import BytesIO
 import base64
 import time
 
-def auto_phat_audio(mp3_fp):
-    audio_placeholder=st.empty()
-    data = mp3_fp.read()
-    b64 = base64.b64encode(data).decode()
-    md = f"""
-        <audio controls autoplay="true">
-        <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-        </audio>
-        """
-    audio_placeholder.empty()
-    time.sleep(0.2) 
-    audio_placeholder.markdown(md,unsafe_allow_html=True)
-    
+def auto_phat_audio(file_mp3):
+    mymidia_placeholder = st.empty()
+    with open(file_mp3,'rb') as f:
+        mymidia_bytes=f.read()
+    mymidia_str = "data:audio/ogg;base64,%s"%(base64.b64encode(mymidia_bytes).decode())
+    mymidia_html = """
+                    <audio controls autoplay class="stAudio">
+                    <source src="%s" type="audio/ogg">
+                    Your browser does not support the audio element.
+                    </audio>
+                """%mymidia_str
+
+    mymidia_placeholder.empty()
+    time.sleep(1)
+    mymidia_placeholder.markdown(mymidia_html, unsafe_allow_html=True)
+
+    #audio_placeholder=st.empty()
+    #data = mp3_fp.read()
+    #b64 = base64.b64encode(data).decode()
+    #md = f"""
+    #    <audio controls autoplay="true">
+    #    <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+    #    </audio>
+    #    """
+    #audio_placeholder.empty()
+    #time.sleep(0.2) 
+    #audio_placeholder.markdown(md,unsafe_allow_html=True)
+
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
     with open('thu.wav','wb') as f:
         f.write(audio_bytes)
@@ -44,12 +59,15 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                 text_translated = translator.translate(text_from_audio, src=lang_src,dest=lang_dest).text    # Dich ra En theo tai lieu web
                 st.write(text_translated)
             if text_translated !='':
-                mp3_fp = BytesIO()
+                #mp3_fp = BytesIO()
                 tts = gTTS(text_translated, lang=lang_dest)
-                tts.write_to_fp(mp3_fp)
-                mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
+                file_mp3='out.mp3'
+                tts.save(file_mp3)
+
+                #tts.write_to_fp(mp3_fp)
+                #mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
                 #st.audio(mp3_fp, format="audio/wav",start_time=0)
-                auto_phat_audio(mp3_fp)
+                auto_phat_audio(file_mp3)
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
         except sr.RequestError as e:
