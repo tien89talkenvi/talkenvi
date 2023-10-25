@@ -17,7 +17,7 @@ import streamlit.components.v1 as stc
 import base64
 import time
 import pygame
-#from pydub import AudioSegment
+from pydub import AudioSegment
 
 def pygame_play_audio(temp_wav_file):
     pygame.init()
@@ -72,18 +72,15 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                 # gTTS dich text ra text lang 2 roi tra ve kq la tts text lang2
                 tts = gTTS(text_translated, lang=lang_dest)
                 # ghi kq nay vao mp3_fp
-                temp_wav_file='out.wav'
-                tts.save(temp_wav_file)
                 #tts.write_to_fp(mp3_fp)
-                # files                                                                         
-                #src = "out.mp3"
-                #dst = "out.wav"
-                # convert mp3 to wav                                                            
-                #sound = AudioSegment.from_mp3(src)
-                #sound.export(dst, format="wav")
-
                 #mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
                 #st.audio(mp3_fp, format="audio/wav",start_time=0)
+                temp_mp3_file='out.mp3'
+                tts.save(temp_mp3_file)
+                temp_wav_file='out.wav'
+                # convert mp3 to wav                                                            
+                sound = AudioSegment.from_mp3(temp_mp3_file)
+                sound.export(temp_wav_file, format="wav")
                 pygame_play_audio(temp_wav_file)
                 #auto_phat_audio(mp3_fp)
         except sr.UnknownValueError:
