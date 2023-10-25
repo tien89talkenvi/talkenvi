@@ -14,13 +14,13 @@ from googletrans import Translator
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
 #import streamlit.components.v1 as stc
-import pybase64
+import base64
 import time
 
 def auto_phat_audio(mp3_fp):
     audio_placeholder=st.empty()
     data = mp3_fp.read()
-    b64 = pybase64.b64encode(data).decode()
+    b64 = base64.b64encode(data).decode()
     md = f"""
         <audio controls autoplay="true">
         <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
