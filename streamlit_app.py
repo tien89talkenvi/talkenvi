@@ -51,14 +51,11 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                 st.write(":blue["+text_translated+"]")
             if text_translated !='':
                 mp3_fp = BytesIO()
-                try:
-                    tts = gTTS(text_translated, lang=lang_dest)
-                    tts.write_to_fp(mp3_fp)
-                    mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
-                    st.audio(mp3_fp, format="audio/wav",start_time=0)
-                    auto_phat_audio(mp3_fp)
-                except gTTSError as err:
-                    st.error(err)
+                tts = gTTS(text_translated, lang=lang_dest)
+                tts.write_to_fp(mp3_fp)
+                mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
+                st.audio(mp3_fp, format="audio/wav",start_time=0)
+                auto_phat_audio(mp3_fp)
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
         except sr.RequestError as e:
@@ -66,7 +63,7 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
             #print(f"Lỗi: {e}")
 
 #######################################################
-st.title(":blue[Trò chuyện có thông dịch bằng tiếng Việt và tiếng...]")
+st.subheader(":blue[Trò chuyện có thông dịch bằng tiếng Việt và tiếng...]")
 tieng_khac = st.selectbox(":blue[(Talk with interpretation in Vietnamese and ...)]", 
                 ("English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)"),index=0)
 sub1='('
