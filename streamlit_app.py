@@ -13,7 +13,6 @@
 #demo = gr.Interface(fn=greet, inputs="text", outputs="text")
 #demo.launch()
 ###############
-import gradio as gr
 from gtts import gTTS
 from io import BytesIO
 import base64
