@@ -16,30 +16,29 @@ from io import BytesIO
 #import streamlit.components.v1 as stc
 import base64
 import time
+from streamlit.components.v1 import html
 
 def auto_phat_audio(mp3_fp):
     audio_placeholder=st.empty()
     data = mp3_fp.read()
-    b64 = base64.b64encode(data).decode()
-    my_js= """
-            unmuteButton.addEventListener('click', function() {
-                    video.muted = false;
+    audio_b64 = base64.b64encode(data).decode()
+    my_js=  '''unmuteButton.addEventListener('click', function() {
+                    audio.muted = false;
                     });
-            """ 
-
-    md = f"""
-            <video id="video" muted autoplay>
+        '''
+    my_html=f'''
+            <audio id="audio" muted autoplay>
             <button id="unmuteButton"></button>
             <script>{my_js}</script>
-
             <iframe
-                src="data:audio/mp3;base64,{b64}"
+                src="data:audio/mp3;base64,{audio_b64}"
                 allow="autoplay" style="width: 0; height: 0; boder: 0; border: none; position: absolute;">
             </iframe>
-        """
+            '''
     audio_placeholder.empty()
-    time.sleep(0.2) 
-    audio_placeholder.markdown(md,unsafe_allow_html=True)
+    time.sleep(0.2)
+    html(my_html) 
+    #audio_placeholder.markdown(md,unsafe_allow_html=True)
 
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
     with open('thu.wav','wb') as f:
