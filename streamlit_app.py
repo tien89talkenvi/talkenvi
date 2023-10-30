@@ -22,15 +22,8 @@ def auto_phat_audio(mp3_fp):
     audio_placeholder=st.empty()
     data = mp3_fp.read()
     audio_b64 = base64.b64encode(data).decode()
-    my_js=  '''unmuteButton.addEventListener('click', function() {
-                    audio.muted = false;
-                    });
-        '''
     my_html=f'''
-            <audio id="audio" muted autoplay>
-            <button id="unmuteButton"></button>
-            <script>{my_js}</script>
-            <audio id="audio" autoplay src="data:audio/mp3;base64,{audio_b64}"></audio>
+            <audio autoplay src="data:audio/mp3;base64,{audio_b64}"></audio>
             '''
     audio_placeholder.empty()
     time.sleep(0.2)
@@ -62,7 +55,7 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                     tts = gTTS(text_translated, lang=lang_dest)
                     tts.write_to_fp(mp3_fp)
                     mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
-                    #st.audio(mp3_fp, format="audio/wav",start_time=0)
+                    st.audio(mp3_fp, format="audio/wav",start_time=0)
                     auto_phat_audio(mp3_fp)
                 except gTTSError as err:
                     st.error(err)
