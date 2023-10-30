@@ -68,7 +68,7 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
 #######################################################
 st.title(":blue[Trò chuyện có thông dịch bằng tiếng Việt và tiếng...]")
 tieng_khac = st.selectbox(":blue[(Talk with interpretation in Vietnamese and ...)]", 
-                ("English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)"),index=0)
+                ("English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","French - Pháp (fr)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)","Thai - Thái lan (th)","Khmer - Campuchia (km)"),index=0)
 sub1='('
 sub2=')'
 idx1 = tieng_khac.index(sub1)
