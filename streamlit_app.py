@@ -30,10 +30,7 @@ def auto_phat_audio(mp3_fp):
             <audio id="audio" muted autoplay>
             <button id="unmuteButton"></button>
             <script>{my_js}</script>
-            <iframe
-                src="data:audio/mp3;base64,{audio_b64}"
-                allow="autoplay" style="width: 0; height: 0; boder: 0; border: none; position: absolute;">
-            </iframe>
+            <audio autoplay src="data:audio/mp3;base64,{audio_b64}"></audio>
             '''
     audio_placeholder.empty()
     time.sleep(0.2)
@@ -65,7 +62,7 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
                     tts = gTTS(text_translated, lang=lang_dest)
                     tts.write_to_fp(mp3_fp)
                     mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
-                    st.audio(mp3_fp, format="audio/wav",start_time=0)
+                    #st.audio(mp3_fp, format="audio/wav",start_time=0)
                     auto_phat_audio(mp3_fp)
                 except gTTSError as err:
                     st.error(err)
