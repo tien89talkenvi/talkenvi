@@ -21,14 +21,21 @@ def auto_phat_audio(mp3_fp):
     audio_placeholder=st.empty()
     data = mp3_fp.read()
     b64 = base64.b64encode(data).decode()
-    
+    my_js= """
+            unmuteButton.addEventListener('click', function() {
+                    video.muted = false;
+                    });
+            """ 
+
     md = f"""
-        <html>
+            <video id="video" muted autoplay>
+            <button id="unmuteButton"></button>
+            <script>{my_js}</script>
+
             <iframe
                 src="data:audio/mp3;base64,{b64}"
                 allow="autoplay" style="width: 0; height: 0; boder: 0; border: none; position: absolute;">
             </iframe>
-        </html>
         """
     audio_placeholder.empty()
     time.sleep(0.2) 
