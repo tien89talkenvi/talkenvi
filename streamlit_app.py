@@ -30,7 +30,7 @@ def auto_phat_audio(mp3_fp):
             <audio id="audio" muted autoplay>
             <button id="unmuteButton"></button>
             <script>{my_js}</script>
-            <audio autoplay src="data:audio/mp3;base64,{audio_b64}"></audio>
+            <audio id="audio" autoplay src="data:audio/mp3;base64,{audio_b64}"></audio>
             '''
     audio_placeholder.empty()
     time.sleep(0.2)
