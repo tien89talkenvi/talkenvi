@@ -21,13 +21,17 @@ def auto_phat_audio(mp3_fp):
     audio_placeholder=st.empty()
     data = mp3_fp.read()
     b64 = base64.b64encode(data).decode()
+    
     md = f"""
-        <audio autoplay="true">
-        <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-        </audio>
+        <html>
+            <iframe
+                src="data:audio/mp3;base64,{b64}"
+                allow="autoplay" style="width: 0; height: 0; boder: 0; border: none; position: absolute;">
+            </iframe>
+        </html>
         """
     audio_placeholder.empty()
-    time.sleep(0.5) 
+    time.sleep(0.2) 
     audio_placeholder.markdown(md,unsafe_allow_html=True)
 
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
