@@ -90,7 +90,7 @@ if vaichon==":red[Nói tiếng VIỆT (Vietnamese)]":
     lang_dest=codelang
     mtext="Click on mic rồi nói tiếng VIỆT (Vietnamese)"
     # Chay ham hien mic voi cac tham so va thu am roi tra ve audio_bytes thu duoc
-    audio_bytes1 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
+    audio_bytes1 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#FF0000",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=5.0)
     if audio_bytes1:
         # chay ham Xu li audio_bytes da thu de cho ra ket qua cuoi cung la phat ra am thanh dest
         xuli_ra_phat_am_dest(audio_bytes1,lang_sp,lang_src,lang_dest)
@@ -101,7 +101,7 @@ elif vaichon==":blue[Nói tiếng "+tieng_khac+"]":
     lang_dest='vi'
     mtext='Click on mic rồi nói tiếng '+tieng_khac
     # Chay ham hien mic voi cac tham so va thu am roi tra ve audio_bytes thu duoc
-    audio_bytes2 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=3.0)
+    audio_bytes2 = audio_recorder(text=mtext,recording_color="#FFFF00",neutral_color="#0000FF",icon_size="2x",energy_threshold=(-1.0,1.0),pause_threshold=5.0)
     if audio_bytes2:
         # chay ham Xu li audio_bytes da thu de cho ra ket qua cuoi cung la phat ra am thanh dest
         xuli_ra_phat_am_dest(audio_bytes2,lang_sp,lang_src,lang_dest)
