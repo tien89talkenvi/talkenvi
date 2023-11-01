@@ -22,12 +22,16 @@ def auto_phat_audio(mp3_fp):
     audio_placeholder=st.empty()
     data = mp3_fp.read()
     audio_b64 = base64.b64encode(data).decode()
-    my_html=f'''
-            <audio source src="data:audio/mp3;base64,{audio_b64}" preload="auto" autoplay contols>
-            </audio>
-            '''
+    my_html  = f"""
+                  <html>
+                      <iframe
+                          src="data:audio/mp3;base64,{audio_b64}"
+                          allow="autoplay" id="audio" style="display:none">
+                      </iframe>
+                  </html>
+              """
     audio_placeholder.empty()
-    time.sleep(0.5)
+    time.sleep(0.2)
     html(my_html) 
     #audio_placeholder.markdown(md,unsafe_allow_html=True)
 
