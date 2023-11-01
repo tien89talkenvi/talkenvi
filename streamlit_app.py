@@ -12,23 +12,18 @@ import speech_recognition as sr
 from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-streamlit
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
-from io import BytesIO  
+#from io import BytesIO  
 #import streamlit.components.v1 as stc
-import base64
-import time
+#import base64
+#import time
 from streamlit.components.v1 import html
-import io
-import pygame
+from play_audio_with_vlc import play_with_vlc
 
-def auto_phat_audio(my_text):
-    with io.BytesIO() as f:
-        gTTS(text=my_text, lang='vi').write_to_fp(f)
-        f.seek(0)
-        pygame.mixer.init()
-        pygame.mixer.music.load(f)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            continue
+#def auto_phat_audio(my_text):
+#    with io.BytesIO() as f:
+#        gTTS(text=my_text, lang='vi').write_to_fp(f)
+#        f.seek(0)
+#        play_with_vlc(f)
 
     #speak('Tôi là một giáo viên.')
 
@@ -65,14 +60,15 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
             else:
                 st.write(":blue["+text_translated+"]")
             if text_translated !='':
-                with io.BytesIO() as f:
-                    gTTS(text=text_translated, lang=lang_dest).write_to_fp(f)
-                    f.seek(0)
-                    pygame.mixer.init()
-                    pygame.mixer.music.load(f)
-                    pygame.mixer.music.play()
-                    while pygame.mixer.music.get_busy():
-                        continue
+                tts=gTTS(text_translated, lang=lang_dest)
+                tts.save('temp.mp3')
+
+                #with io.BytesIO() as mp3_fp:
+                #    tts=gTTS(text_translated, lang=lang_dest)
+                #    tts.save('temp.mp3')
+                #    tts.write_to_fp(mp3_fp)
+                #    mp3_fp.seek(0)
+                play_with_vlc('temp.mp3')
 
                 #mp3_fp = BytesIO()
                 #try:
