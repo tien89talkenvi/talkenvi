@@ -23,12 +23,11 @@ def auto_phat_audio(mp3_fp):
     data = mp3_fp.read()
     audio_b64 = base64.b64encode(data).decode()
     my_html=f'''
-            <audio id="audio" controls autoplay>
-             <source src="data:audio/mp3;base64,{audio_b64}" type="audio/mpeg">
+            <audio source src="data:audio/mp3;base64,{audio_b64}" preload="auto" autoplay contols>
             </audio>
             '''
     audio_placeholder.empty()
-    time.sleep(0.2)
+    time.sleep(0.5)
     html(my_html) 
     #audio_placeholder.markdown(md,unsafe_allow_html=True)
 
