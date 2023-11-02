@@ -12,32 +12,23 @@ import speech_recognition as sr
 from audio_recorder_streamlit import audio_recorder #pip install audio-recorder-streamlit
 from googletrans import Translator 
 from gtts import gTTS, gTTSError   
-#from io import BytesIO  
-#import streamlit.components.v1 as stc
-#import base64
-#import time
+from io import BytesIO  
+import base64
+import time
 from streamlit.components.v1 import html
-from play_audio_with_vlc import play_with_vlc
 
-#def auto_phat_audio(my_text):
-#    with io.BytesIO() as f:
-#        gTTS(text=my_text, lang='vi').write_to_fp(f)
-#        f.seek(0)
-#        play_with_vlc(f)
-
-    #speak('Tôi là một giáo viên.')
-
-    #audio_placeholder=st.empty()
-    #data = mp3_fp.read()
-    #audio_b64 = base64.b64encode(data).decode()
-    #my_html=f'''
-    #        <audio autoplay>
-    #         <source src="data:audio/mp3;base64,{audio_b64}">
-    #        </audio>
-    #        '''
-    #audio_placeholder.empty()
-    #time.sleep(0.2)
-    #html(my_html) 
+def auto_phat_audio(mp3_fp):
+    audio_placeholder=st.empty()
+    data = mp3_fp.read()
+    audio_b64 = base64.b64encode(data).decode()
+    my_html=f'''
+            <audio autoplay>
+             <source src="data:audio/mp3;base64,{audio_b64}">
+            </audio>
+            '''
+    audio_placeholder.empty()
+    time.sleep(0.2)
+    html(my_html) 
     #audio_placeholder.markdown(md,unsafe_allow_html=True)
 
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
@@ -60,25 +51,15 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
             else:
                 st.write(":blue["+text_translated+"]")
             if text_translated !='':
-                tts=gTTS(text_translated, lang=lang_dest)
-                tts.save('temp.mp3')
-
-                #with io.BytesIO() as mp3_fp:
-                #    tts=gTTS(text_translated, lang=lang_dest)
-                #    tts.save('temp.mp3')
-                #    tts.write_to_fp(mp3_fp)
-                #    mp3_fp.seek(0)
-                play_with_vlc('temp.mp3')
-
-                #mp3_fp = BytesIO()
-                #try:
-                #    tts = gTTS(text_translated, lang=lang_dest)
-                #    tts.write_to_fp(mp3_fp)
-                #    mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
-                #    st.audio(mp3_fp, format="audio/wav",start_time=0)
-                #    auto_phat_audio(mp3_fp)
-                #except gTTSError as err:
-                #    st.error(err)
+                mp3_fp = BytesIO()
+                try:
+                    tts = gTTS(text_translated, lang=lang_dest)
+                    tts.write_to_fp(mp3_fp)
+                    mp3_fp.seek(0)  #phai co dong nay thi auto_phat_audio moi phat dc
+                    st.audio(mp3_fp, format="audio/wav",start_time=0)
+                    auto_phat_audio(mp3_fp)
+                except gTTSError as err:
+                    st.error(err)
         except sr.UnknownValueError:
             st.write("Không nhận thức được tiếng nói")
         except sr.RequestError as e:
