@@ -14,21 +14,48 @@ from googletrans import Translator
 from gtts import gTTS, gTTSError   
 from io import BytesIO  
 import base64
-import time
 from streamlit.components.v1 import html
+from selenium.webdriver import Firefox
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
+import time
+
 
 def auto_phat_audio(mp3_fp):
     audio_placeholder=st.empty()
     data = mp3_fp.read()
     audio_b64 = base64.b64encode(data).decode()
-    my_html=f'''
-            <audio autoplay>
-             <source src="data:audio/mp3;base64,{audio_b64}">
-            </audio>
+    ma_script='''
+                var btn = document.getElementById("playaudio");
+                btn.addEventListener("click", phat_ra_am);
+                function phat_ra_am() {
+                    document.getElementById("myAudio").play();
+                };
             '''
-    audio_placeholder.empty()
-    time.sleep(0.2)
-    html(my_html) 
+    my_html=f'''
+            <html>
+            <audio id="myAudio" controls>
+                <source src="data:audio/mp3;base64,{audio_b64}">
+            </audio>
+            <button id="playaudio" type="button"></button>
+            <script>{ma_script}</script>
+            </html>
+            '''
+    with open('temp.html','w') as f:
+        f.write(my_html)
+
+    
+    opts = Options()
+    browser = Firefox(options=opts)
+    browser.get('http://127.0.0.1:5500/temp.html')
+    results = browser.find_element(By.ID, 'playaudio')
+    results.click()
+    time.sleep(3)
+    browser.quit()
+
+    #audio_placeholder.empty()
+    #time.sleep(0.2)
+    #html(my_html) 
     #audio_placeholder.markdown(md,unsafe_allow_html=True)
 
 def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
@@ -109,4 +136,3 @@ elif vaichon==":blue[Nói tiếng "+tieng_khac+"]":
 
 else:
     pass
-
