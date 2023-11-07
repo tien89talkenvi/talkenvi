@@ -95,11 +95,11 @@ with colC:
 
 audio_bytes = audio_recorder(text='')
 
+vaichon = st.radio(":green[Chọn một ngôn ngữ dưới đây rồi nhấp micro để NÓI:]", [":red["+tieng_1+"]",":blue["+tieng_2+"]",'CLEAR'],index=2,horizontal=True ) 
+
+col1, col2 = st.columns(2)
+
 if audio_bytes:
-    vaichon = st.radio(":green[Chọn một ngôn ngữ dưới đây rồi nhấp micro để NÓI:]", [":red["+tieng_1+"]",":blue["+tieng_2+"]",'CLEAR'],index=2,horizontal=True ) 
-
-    col1, col2 = st.columns(2)
-
     if vaichon==":red["+tieng_1+"]":
         codelang_1 = ma_tieng(tieng_1)
         lang_sp=codelang_1
@@ -114,3 +114,5 @@ if audio_bytes:
         xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest)    
     else:
         audio_bytes=bytes()
+else:
+    pass
