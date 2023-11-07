@@ -97,6 +97,8 @@ audio_bytes = audio_recorder(text='')
 
 vaichon = st.radio(":green[Chọn một ngôn ngữ dưới đây rồi nhấp micro để NÓI:]", [":red["+tieng_1+"]",":blue["+tieng_2+"]",'CLEAR'],index=2,horizontal=True ) 
 
+st.write("---")
+
 col1, col2 = st.columns(2)
 
 if audio_bytes:
