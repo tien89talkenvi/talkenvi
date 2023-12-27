@@ -3,3 +3,4 @@ SpeechRecognition==3.10.0
 googletrans==4.0.0rc1
 gTTS==2.4.0
 audio-recorder-streamlit==0.0.8
+streamlit-option-menu==0.3.6
