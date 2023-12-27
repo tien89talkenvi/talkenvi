@@ -90,7 +90,7 @@ tieng_2 = "English (en)"
 
 with st.sidebar:
     selected = option_menu("Setting", ["Lang 1", 'Lang 2'], 
-        icons=['house', 'gear'], menu_icon="cast", default_index=0)
+        icons=['house', 'cloud-upload'], menu_icon="gear", default_index=0)
     if selected == "Lang 1":
         tieng_1 = st.selectbox("Reset lang 1",langguages, index=0,key='L1' )
     if selected == "Lang 2":
