@@ -82,7 +82,7 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
             #print(f"Lỗi: {e}")
 
 #######################################################
-st.title(":blue[ :boy: + :girl: : Talk In 2 Languages]")
+st.title(":blue[ :boy:+:girl: : Talk In 2 Languages]")
 langguages = ("Vietnamese (vi)","English (en)","Latin (la)","Spanish (es)","Taiwan (zh-TW)","Danish (da)","German (de)","Dutch (nl)","French (fr)","Japanese (ja)","Korean (ko)","Thai (th)","Khmer (km)")
 tieng_1 = "Vietnamese (vi)"
 tieng_2 = "English (en)"
