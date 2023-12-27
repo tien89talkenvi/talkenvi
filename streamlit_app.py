@@ -8,6 +8,7 @@ from io import BytesIO
 import base64
 import time
 from streamlit.components.v1 import html
+from streamlit_option_menu import option_menu
 
 def thuc_hien_dao(tieng_1,tieng_2):
     index_t1=3
@@ -81,34 +82,41 @@ def xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest):
             #print(f"Lỗi: {e}")
 
 #######################################################
-st.subheader(":blue[Trò chuyện có thông dịch bằng hai ngôn ngữ]")
+st.title(":blue[:sunglasses: Talk In 2 Languages]")
 
-colA, colB,colC = st.columns(3)
-with colA:
-    st.write(':green[Thiết lập hai ngôn ngữ đàm thoại:]')        
-with colB:
-    tieng_1 = st.selectbox(":red[---NÓI]", 
-                ("Vietnamese - Viet (vi)","English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","French - Pháp (fr)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)","Thai - Thái lan (th)","Khmer - Campuchia (km)"),index=0,key=1,label_visibility="hidden" )
-with colC:
-    tieng_2 = st.selectbox(":blue[---NGHE (đã dịch)]", 
-                ("Vietnamese - Viet (vi)","English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","French - Pháp (fr)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)","Thai - Thái lan (th)","Khmer - Campuchia (km)"),index=1,key=2,label_visibility="hidden" )
+langguages = ("Vietnamese (vi)","English (en)","Latin (la)","Spanish (es)","Taiwan (zh-TW)","Danish (da)","German (de)","Dutch (nl)","French (fr)","Japanese (ja)","Korean (ko)","Thai (th)","Khmer (km)")
+tieng_1 = "Vietnamese (vi)"
+tieng_2 = "English (en)"
 
-audio_bytes = audio_recorder(text='')
+with st.sidebar:
+    selected = option_menu("Setting", ["Lang 1", 'Lang 2'], 
+        icons=['house', 'gear'], menu_icon="cast", default_index=0)
+    if selected == "Lang 1":
+        tieng_1 = st.selectbox("Reset lang 1",langguages, index=0,key='L1' )
+    if selected == "Lang 2":
+        tieng_2 = st.selectbox("Reset lang 2",langguages, index=1,key='L2' )
 
-vaichon = st.radio(":green[Chọn một ngôn ngữ dưới đây rồi nhấp micro để NÓI:]", [":red["+tieng_1+"]",":blue["+tieng_2+"]",'CLEAR'],index=2,horizontal=True ) 
+# horizontal Menu
+vaichon = option_menu(None, [tieng_1[0:tieng_1.index('(')], tieng_2[0:tieng_2.index('(')]], 
+    icons=['house', 'cloud-upload'], 
+    menu_icon="cast", default_index=0, orientation="horizontal")
+
+
+
+audio_bytes = audio_recorder(text='Select a lang and click mic to say : ')
 
 st.write("---")
 
 col1, col2 = st.columns(2)
 
 if audio_bytes:
-    if vaichon==":red["+tieng_1+"]":
+    if vaichon==tieng_1[0:tieng_1.index('(')]:
         codelang_1 = ma_tieng(tieng_1)
         lang_sp=codelang_1
         lang_src=codelang_1
         lang_dest=ma_tieng(tieng_2)
         xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest)    
-    elif vaichon==":blue["+tieng_2+"]":
+    elif vaichon==tieng_2[0:tieng_2.index('(')]:
         codelang_2 = ma_tieng(tieng_2)
         lang_sp=codelang_2
         lang_src=codelang_2
