@@ -97,13 +97,13 @@ st.write("---")
 col1, col2 = st.columns(2)
 
 if audio_bytes:
-    if vaichon==tieng_1[0:tieng_1.index('(')]:
+    if vaichon==tieng_1:
         codelang_1 = ma_tieng(tieng_1)
         lang_sp=codelang_1
         lang_src=codelang_1
         lang_dest=ma_tieng(tieng_2)
         xuli_ra_phat_am_dest(audio_bytes,lang_sp,lang_src,lang_dest)    
-    elif vaichon==tieng_2[0:tieng_2.index('(')]:
+    elif vaichon==tieng_2:
         codelang_2 = ma_tieng(tieng_2)
         lang_sp=codelang_2
         lang_src=codelang_2
