@@ -10,18 +10,6 @@ import time
 from streamlit.components.v1 import html
 from streamlit_option_menu import option_menu
 
-def thuc_hien_dao(tieng_1,tieng_2):
-    index_t1=3
-    index_t2=2
-    with col1:
-        tieng_1 = st.selectbox(":red[---NÓI]", 
-                    ("Vietnamese - Viet (vi)","English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","French - Pháp (fr)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)","Thai - Thái lan (th)","Khmer - Campuchia (km)"),index=index_t1,key=1)
-
-    with col2:
-        tieng_2 = st.selectbox(":blue[---NGHE (đã dịch)]", 
-                    ("Vietnamese - Viet (vi)","English - Anh (en)","Spanish - Tây ban nha (es)","Taiwan - Đài loan (zh-TW)","Danish - Đan mạch (da)","German - Đức (de)","Dutch - Hà lan (nl)","French - Pháp (fr)","Japanese - Nhật bản (ja)","Korean - Hản quốc (ko)","Thai - Thái lan (th)","Khmer - Campuchia (km)"),index=index_t2,key=2)
-
-
 def ma_tieng(tieng):
     global codelang_1,codelang_2
     sub1='('
@@ -96,7 +84,7 @@ with st.sidebar:
         tieng_2 = st.selectbox("Reset lang 2",langguages, index=1,key='L2' )
 
 # horizontal Menu
-vaichon = option_menu(None, [tieng_1[0:tieng_1.index('(')], tieng_2[0:tieng_2.index('(')]], 
+vaichon = option_menu(None, [tieng_1, tieng_2], 
     icons=['house', 'cloud-upload'], 
     menu_icon="cast", default_index=0, orientation="horizontal")
 
