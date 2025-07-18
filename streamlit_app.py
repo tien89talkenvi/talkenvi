@@ -11,60 +11,18 @@ from urllib.parse import urlparse, parse_qs
 
 
 #----------------------- cac def ---------------------
-# Ham nay de xet xem url co phai cua youtube hay khong
-def parse_youtube_url(url):
-    """
-    Trả về video_id nếu url là YouTube; ngược lại trả về None.
-    Hỗ trợ:
-      - https://www.youtube.com/watch?v=ID
-      - https://youtu.be/ID
-      - https://www.youtube.com/embed/ID
-    """
-    try:
-        parsed = urlparse(url)
-        domain = parsed.netloc.lower()
-        # Chỉ chấp nhận youtube.com hoặc youtu.be
-        if not any(domain.endswith(d) for d in ("youtube.com", "youtu.be")):
-            return None
-
-        # youtube.com/watch?v=ID
-        if "youtube.com" in domain:
-            qs = parse_qs(parsed.query)
-            vid = qs.get("v")
-            if vid:
-                return vid[0]
-            # hoặc đường embed: /embed/ID
-            path_parts = parsed.path.split("/")
-            if len(path_parts) >= 3 and path_parts[1] == "embed":
-                return path_parts[2]
-
-        # youtu.be/ID
-        if "youtu.be" in domain:
-            return parsed.path.lstrip("/")
-
-    except Exception:
-        pass
-
-    return None
-
-# Ham nay de xet xem yt co phu de goc hay phu de tu sinh hay khong
 def get_subtitle_urls(info_dict):
     def extract_urls(subs_dict):
         urls = {}
         for lang, tracks in subs_dict.items():
             ttml_url = None
-            vtt_url = None
             for track in tracks:
                 ext = track.get("ext")
                 if ext == "ttml" and not ttml_url:
                     ttml_url = track.get("url")
-                elif ext == "vtt" and not vtt_url:
-                    vtt_url = track.get("url")
             # Ưu tiên TTML, fallback sang VTT nếu không có
             if ttml_url:
                 urls[lang] = {"ext": "ttml", "url": ttml_url}
-            elif vtt_url:
-                urls[lang] = {"ext": "vtt", "url": vtt_url}
         return urls
 
     subtitles = info_dict.get("subtitles", {})
@@ -74,35 +32,6 @@ def get_subtitle_urls(info_dict):
         "official_subtitles": extract_urls(subtitles),
         "automatic_captions": extract_urls(auto_captions)
     }
-
-def get_subtitle_urls(info_dict):
-    def extract_urls(subs_dict):
-        urls = {}
-        for lang, tracks in subs_dict.items():
-            ttml_url = None
-            vtt_url = None
-            for track in tracks:
-                ext = track.get("ext")
-                if ext == "ttml" and not ttml_url:
-                    ttml_url = track.get("url")
-                elif ext == "vtt" and not vtt_url:
-                    vtt_url = track.get("url")
-            # Ưu tiên TTML, fallback sang VTT nếu không có
-            if ttml_url:
-                urls[lang] = {"ext": "ttml", "url": ttml_url}
-            elif vtt_url:
-                urls[lang] = {"ext": "vtt", "url": vtt_url}
-        return urls
-
-    subtitles = info_dict.get("subtitles", {})
-    auto_captions = info_dict.get("automatic_captions", {})
-
-    return {
-        "official_subtitles": extract_urls(subtitles),
-        "automatic_captions": extract_urls(auto_captions)
-    }
-# subtitle_data = get_subtitle_urls(info_dict)
-# print(subtitle_data)
 
 def time_to_seconds(t):
     h, m, s = t.split(':')
@@ -120,12 +49,13 @@ def parse_ttml_with_seconds(ttml_string):
 
         if begin and end and text:
             subtitles.append({
-                'start': time_to_seconds(begin),
-                'end': time_to_seconds(end),
+                'start': round(time_to_seconds(begin),3),
+                'end': round(time_to_seconds(end),3),
                 'text': text,
                 'textdich': text
             })
     return subtitles
+
 
 def lap_html_video(videoId, subtitles):
     subtitle_js = json.dumps(subtitles)
@@ -318,6 +248,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 videoID=''
 subtitles=[]
 html_code=''
+save_dir=""
 
 #--- sidebar ben trai--------------------------
 
@@ -325,19 +256,7 @@ with st.sidebar:
     st.title("🤖 Xem youtube với phụ đề dịch nói")
     video_url = st.text_input("🔗 Nhập URL video YouTube: vd:  https://www.youtube.com/watch?v=Xwb1OrkPupM&t=5s", "")
 
-    use_cookies = st.checkbox("📂 Dùng cookies.txt (nếu bị chặn)")
-    use_proxy = st.checkbox("🌍 Dùng proxy")
-
-    # Tuỳ chọn proxy
-    proxy_url = ""
-    if use_proxy:
-        proxy_url = st.text_input("Proxy URL (VD: http://123.45.67.89:8080)", "")
-
-    # kiem tra xem video_url co hop le khong
-    vid = parse_youtube_url(video_url)
-    #st.write(f"{video_url!r} ->", "YouTube ID =" , vid if vid else "Không phải YouTube")
-
-    if st.button("Lấy thông tin") and vid:
+    if st.button("Lấy thông tin"):
         tbaodong1 = st.empty()
         tbaodong1.write('⏳ Đang xử lý...')
 
@@ -345,102 +264,52 @@ with st.sidebar:
         ydl_opts = {
             'quiet': True,
             'no_warnings': True,
-            'ratelimit': 500000,  # giới hạn tốc độ tải: 500 KB/s
-            'sleep_interval_requests': 2,  # nghỉ 2 giây giữa các request
+            #'ratelimit': 500000,  # giới hạn tốc độ tải: 500 KB/s
+            #'sleep_interval_requests': 2,  # nghỉ 2 giây giữa các request
             'skip_download': True,
-            'forcejson': True,
+            'forcejson': True
         }
-
-        if use_cookies:
-            ydl_opts['cookiefile'] = 'cookies.txt'
-
-        if use_proxy and proxy_url:
-            ydl_opts['proxy'] = proxy_url
 
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info_dict = ydl.extract_info(video_url, download=False)
                 videoID = info_dict['id']
+                st.write("videoID: ",videoID)
                 # xet phu de                    
                 subtitle_data = get_subtitle_urls(info_dict)
-                #st.write(subtitle_data)
-
                 # xet phu de truyen thong
-                if subtitle_data["official_subtitles"] != {}:
-                    if subtitle_data["official_subtitles"]["en"]:
-                        dangPdEn = subtitle_data["official_subtitles"]["en"]["ext"]
-                        urlPdEn = subtitle_data["official_subtitles"]["en"]["url"]
-                        ttLayPdEn = [dangPdEn, urlPdEn]
-                        #st.write(ttLayPdEn)   
-                        f = requests.get(ttLayPdEn[1])
-                        if dangPdEn == "ttml":
-                            ttml_content = f.text
-                            subtitles = parse_ttml_with_seconds(ttml_content)
-                            #st.write('pdtt','ttml')
-                            #st.write(subtitles)
-
-                        elif dangPdEn == "vtt":
-                            vtt_content = f.text
-                        else:
-                            subtitles = ''
-                elif subtitle_data["automatic_captions"] != {}:
+                if subtitle_data["automatic_captions"] != {}:
                     if subtitle_data["automatic_captions"]["en"]:
                         dangPdEn = subtitle_data["automatic_captions"]["en"]["ext"]
                         urlPdEn = subtitle_data["automatic_captions"]["en"]["url"]
                         ttLayPdEn = [dangPdEn, urlPdEn]
-                        #st.write(ttLayPdEn)   
                         f = requests.get(ttLayPdEn[1])
                         if dangPdEn == "ttml":
                             ttml_content = f.text
                             subtitles = parse_ttml_with_seconds(ttml_content)
-                            #st.write('pdauto','ttml')
-                            #st.write(subtitles)
-
-                        elif dangPdEn == "vtt":
-                            vtt_content = f.text
-                        else:
-                            subtitles = ''
+                            print("Co subtitles")
+                    else:
+                        st.write("No en subtitles!")           
                 else:
-                    subtitles = ''
-                    #st.write('No Pd')
+                    subtitles = []
+                    st.write("No subtitles!")
 
-                # Hiển thị một số thông tin cơ bản
-                st.subheader("📄 Thông tin video:")
-                st.write(f"**Tiêu đề:** {info_dict.get('title')}")
-                st.write(f"**Tác giả:** {info_dict.get('uploader')}")
-                st.write(f"**Thời lượng:** {info_dict.get('duration')} giây")
-                st.write(f"**Lượt xem:** {info_dict.get('view_count')}")
-                st.write(f"**Ngày đăng:** {info_dict.get('upload_date')}")
-                st.write(f"**Trực tiếp:** {'Có' if info_dict.get('is_live') else 'Không'}")
-                st.write(f"**Phụ đề:** {'Có' if subtitles else 'Không'}")
+                if len(subtitles)>0:
+                    tepjson = "phude.json"
+                    output_file = os.path.join(save_dir, f"{tepjson}")
+                    with open(output_file, 'w', encoding='utf-8') as f:
+                        json.dump(subtitles, f, ensure_ascii=False, indent=2)
 
-                #with st.expander("📦 Xem toàn bộ info_dict"):
-                #    st.json(info)
-
-
-                html_code = lap_html_video(videoID, subtitles)   
-                tbaodong1.write('✅ Đã đủ thông tin và youtube đang hiển thị.')
+                    st.write(f"✅ Đã lưu vào: {output_file}")
+            
+            html_code = lap_html_video(videoID, subtitles)   
+            st.write('✅ Đã đủ thông tin và youtube hiển thị.')
+        
 
         except Exception as e:
-            st.error(f"❌ Lỗi: {str(e)}")
-    #else:
-    #    tbaodong1 = st.empty()  # giu cho roi ghi vao 
-    #    tbaodong1.write('❌ Thông tin nhập không hợp lệ hoặc chưa nhập!')
+            st.write(f"❌ Lỗi: {str(e)}")
 
-#-------man hinh chinh-------------------------
-#st.write('🤖YouTube với phụ để dịch nói')
 if videoID and html_code:
     #st.write('Da co videoId and subtitlesJson')
     #st.title("🎤 Subtitle Viewer with Word-by-Word Voice Highlight")
     components.html(html_code, height=600, scrolling=True)
-
-    # https://www.ted.com/talks/148348 TED 8P khong co caption
-    # https://www.youtube.com/watch?v=6Af6b_wyiwI&t=4s 8p bilgate
-    # https://www.youtube.com/watch?v=mO2Nwv2xSyQ   #VOA
-    #"https://www.ted.com/talks/148348",  # TED 8P khong co caption
-    #"https://www.youtube.com/watch?v=6Af6b_wyiwI&t=4s" # 8p bilgate
-    #"https://www.youtube.com/watch?v=tPIboKLoXg8&t=1s" # VOA bai hoc
-    #"https://youtu.be/Zgfi7wnGZlE?si=TzeWpiERRxzdJKVA" # obama
-
-    # tien89talkenvi\st_tien.py
-    # tien89talkenvi\gpt_cho.py
