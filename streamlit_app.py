@@ -278,7 +278,10 @@ st.header('🏷️Trình hỗ trợ quản lý môi trường nước')
 
 # PHAN 1: TAI FILES TXT DU LIEU DAT VAO EXCEL
 #============================================
+
 st.subheader('✅I. Download the data', divider=True)
+st.markdown("[Mở trang SMARTS](https://smarts.waterboards.ca.gov/smarts/SwPublicUserMenu.xhtml)", unsafe_allow_html=True)
+
 ThucThiPhan_1()
 
 # Them data moi vao trinh theo doi--------------------------
@@ -335,5 +338,6 @@ ThucThiPhan_3()
 # Do thi hoa du lieu
 st.subheader('✅IV. Visualize the data', divider=True)
 ThucThiPhan_4()
+
 
 
