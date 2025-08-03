@@ -122,6 +122,8 @@ def download_data_smarts(regions):
     # CHU Y rang neu ten file dat trung voi file da co thi that bai.
 # CAC HAM CHINH-----------------------------------------------------
 def ThucThiPhan_4():
+    st.markdown("[Mở trang SMARTS](https://smarts.waterboards.ca.gov/smarts/SwPublicUserMenu.xhtml)", unsafe_allow_html=True)
+
     return    
 
 def ThucThiPhan_3():
@@ -334,4 +336,4 @@ ThucThiPhan_3()
 st.subheader('✅IV. Visualize the data', divider=True)
 ThucThiPhan_4()
 
-st.markdown("[Mở trang SMARTS](https://smarts.waterboards.ca.gov/smarts/SwPublicUserMenu.xhtml)", unsafe_allow_html=True)
+
