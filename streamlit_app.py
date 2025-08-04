@@ -122,8 +122,6 @@ def download_data_smarts(regions):
     # CHU Y rang neu ten file dat trung voi file da co thi that bai.
 # CAC HAM CHINH-----------------------------------------------------
 def ThucThiPhan_4():
-    st.markdown("[Mở trang SMARTS](https://smarts.waterboards.ca.gov/smarts/SwPublicUserMenu.xhtml)", unsafe_allow_html=True)
-
     return    
 
 def ThucThiPhan_3():
@@ -261,31 +259,34 @@ def ThucThiPhan_1():
                 placeholder="No selected Region",
                 )
     #neu mot vung duoc chon thi lam
+    LOI='OK'
     if regions:
         placeholder_1 = st.empty()
         placeholder_1.write('Wait for downloading 2 files of ' + regions)
         #thuc thi ham download_data_smarts(regions) va tra ve list cac file da tai 
         try :
             lfile_datai = download_data_smarts(regions)
-            placeholder_1.write('After downloading and placing the following 2 file in Etracker.xlsx')
+            placeholder_1.write('Downloaded files:')
             st.write(lfile_datai)
         except:
-            placeholder_1.write('Tai file that bai!')
+            LOI='LOI'
+            placeholder_1.write('Tai file không đạt!')
+    if LOI == 'LOI':
+        st.write('Nếu không đạt, có thể đến trực tiếp trang sau để tải:')
+        st.markdown("[Mở trang SMARTS](https://smarts.waterboards.ca.gov/smarts/SwPublicUserMenu.xhtml)", unsafe_allow_html=True)
 
 #========================= MAIN =====================================================================
 # TIEU DE APP
 st.header('🏷️Trình hỗ trợ quản lý môi trường nước')
 
 # PHAN 1: TAI FILES TXT DU LIEU DAT VAO EXCEL
-#============================================
-
-st.subheader('✅I. Download the data', divider=True)
-st.markdown("[Mở trang SMARTS](https://smarts.waterboards.ca.gov/smarts/SwPublicUserMenu.xhtml)", unsafe_allow_html=True)
-
+#--------------------------------------------
+st.subheader('✅ I. Download the data', divider=True)
 ThucThiPhan_1()
 
-# Them data moi vao trinh theo doi--------------------------
-st.subheader('✅II. Add the new data to your tracker', divider=True)
+# Them data moi vao trinh theo doi
+#---------------------------------
+st.subheader('✅ II. Add the new data to your tracker', divider=True)
 ThucThiPhan_2()
 # Phan II phai lam cac viec sau:
 #####################################################################################################################################################################################################################################################################
@@ -305,7 +306,7 @@ ThucThiPhan_2()
 
 
 # Phan tich du lieu
-st.subheader('✅III. Analyze the new data', divider=True)
+st.subheader('✅ III. Analyze the new data', divider=True)
 ThucThiPhan_3()
 #-------------------------------------------------------
 # 1. Sắp xếp dữ liệu theo nhiều cấp độ (multi-level sort):
@@ -336,8 +337,7 @@ ThucThiPhan_3()
 
 
 # Do thi hoa du lieu
-st.subheader('✅IV. Visualize the data', divider=True)
+st.subheader('✅ IV. Visualize the data', divider=True)
 ThucThiPhan_4()
 
-
-
+st.markdown("[Mở trang SMARTS](https://smarts.waterboards.ca.gov/smarts/SwPublicUserMenu.xhtml)", unsafe_allow_html=True)
